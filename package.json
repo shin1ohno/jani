@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "testem": "~0.3.27",
+    "jasmine-jquery": "~1.3.3"
+  }
+}
