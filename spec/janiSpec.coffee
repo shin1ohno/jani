@@ -6,7 +6,10 @@ describe "Movie", ->
   describe "createFromHTMLElement", ->
     beforeEach ->
       @movie = Movie.createFromHTMLElement($("#movie")[0], $("#movie_strips .strip"))
-      jasmine.Clock.useMock();
+      jasmine.clock().install()
+
+    afterEach ->
+      jasmine.clock().uninstall()
 
     it "creates movie", ->
       expect(@movie.fps).toEqual(30)
@@ -14,13 +17,13 @@ describe "Movie", ->
 
     it "plays to last frame", ->
       @movie.play()
-      jasmine.Clock.tick(10000);
+      jasmine.clock().tick(10000);
       expect(@movie.screen.currentStrip().isLastFrame()).toBe(true)
 
     it "pause and plays to last frame", ->
       @movie.play()
-      jasmine.Clock.tick(5000);
+      jasmine.clock().tick(5000);
       @movie.pause()
       @movie.play()
-      jasmine.Clock.tick(5000);
+      jasmine.clock().tick(5000);
       expect(@movie.screen.currentStrip().isLastFrame()).toBe(true)

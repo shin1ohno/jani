@@ -1,0 +1,22 @@
+{
+  "name": "jani",
+  "version": "0.0.0",
+  "homepage": "https://github.com/shin1ohno/jani",
+  "authors": [
+    "Ohno Shinichi <shin1ohno@me.com>"
+  ],
+  "description": "Auto-start movie component for SmartPhone borowsers",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jasmine": "~2.0.0",
+    "jasmine-jquery": "~2.0.3",
+    "jquery": "~2.1.0"
+  }
+}

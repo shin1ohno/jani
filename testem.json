@@ -1,13 +1,13 @@
 {
-  "framework": "jasmine",
+  "framework": "jasmine2",
   "before_tests": "coffee -cb **/*.coffee",
   "on_exit": "rm *.js ./src/*.js ./spec/*Spec.js",
   "src_files": [
     "**/*.coffee"
   ],
   "serve_files": [
-    "./node_modules/jasmine-fixture/vendor/js/jquery.min.js",
-    "./node_modules/jasmine-jquery/lib/jasmine-jquery.js",
+    "./bower_components/jquery/dist/jquery.js",
+    "./bower_components/jasmine-jquery/lib/jasmine-jquery.js",
     "./src/*.js",
     "./spec/*.js"
   ],
