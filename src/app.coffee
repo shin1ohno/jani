@@ -4,6 +4,7 @@
 `import Stage from "multiSceneMovie/stage"`
 `import MovieStage from "multiSceneMovie/movieStage"`
 `import Scene from "multiSceneMovie/scene"`
+composed = undefined
 
 $( ()->
 
@@ -52,6 +53,8 @@ $( ()->
       movieScene.start()
     )
 
+    [movieLoadScene, movieScene, movieFinishScene, contentScene]
+
   screenElement = document.getElementById('movie')
   stripElements = document.getElementById('movie_strips').getElementsByClassName('strip')
   movie = Movie.createFromHTMLElement(screenElement, stripElements)
@@ -59,5 +62,6 @@ $( ()->
   movieLoadScene = createMovieLoadingScene($(".movie_control.loading")[0])
   movieFinishScene = createMovieFinishScene($(".movie_control.finished")[0])
   contentScene = createContentScene(document.getElementById('contents'))
-  composeScenes(movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
+  composed = composeScenes(movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
 )
+`export default composed`
