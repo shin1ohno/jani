@@ -1,6 +1,8 @@
-describe "Movie", ->
+`import Movie from "multiSceneMovie/movie"`
+
+describe "single strip movie", ->
   beforeEach ->
-    jasmine.getFixtures().fixturesPath = "spec/fixtures"
+    jasmine.getFixtures().fixturesPath = "fixtures"
     loadFixtures("movie.html")
 
   describe "createFromHTMLElement", ->

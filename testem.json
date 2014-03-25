@@ -1,15 +1,14 @@
 {
   "framework": "jasmine2",
-  "before_tests": "coffee -cb **/*.coffee",
-  "on_exit": "rm *.js ./src/*.js ./spec/*Spec.js",
+  "test_page": "tmp/result/spec/index.html",
+  "routes": {
+    "/spec/spec.js": "tmp/result/spec/spec.js",
+    "/assets/app.js": "tmp/result/assets/app.js",
+    "/assets/templates.js": "tmp/result/assets/templates.js",
+    "/assets/app.css": "tmp/result/assets/app.css"
+  },
   "src_files": [
-    "**/*.coffee"
-  ],
-  "serve_files": [
-    "./bower_components/jquery/dist/jquery.js",
-    "./bower_components/jasmine-jquery/lib/jasmine-jquery.js",
-    "./src/*.js",
-    "./spec/*.js"
+    "tmp/result/**/*.js"
   ],
   "launch_in_dev": ["PhantomJS", "Chrome", "Safari"]
 }

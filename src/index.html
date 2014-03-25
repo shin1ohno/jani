@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>App</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- build:css(tmp/result) /assets/app.min.css -->
+  <link rel="stylesheet" href="/assets/app.css">
+  <!-- <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css"> -->
+  <!-- endbuild -->
+
+  <!-- for more details visit: https://github.com/yeoman/grunt-usemin -->
+
+  <!-- build:js(tmp/result) /assets/config.min.js -->
+
+    <!-- <script src="/config/environment.js"></script> -->
+    <!-- @if tests=false -->
+
+      <!-- @if dist=false -->
+      <!-- <script src="/config/environments/development.js"></script> -->
+      <!-- @endif --><!-- @if dist=true -->
+      <!-- <script src="/config/environments/production.js"></script> -->
+      <!-- @endif -->
+
+    <!-- @endif --><!-- @if tests=true -->
+      <!-- <script src="/config/environments/test.js"></script> -->
+    <!-- @endif -->
+
+  <!-- endbuild -->
+
+  <!-- build:js(tmp/result) /assets/vendor.min.js -->
+
+    <script src="/vendor/jquery/dist/jquery.js"></script>
+
+    <!-- @if dist=false -->
+    <!-- <script src="/vendor/handlebars/handlebars.js"></script> -->
+    <!-- <script src="/vendor/ember/ember.js"></script> -->
+    <!-- @endif --><!-- @if dist=true -->
+    <!-- <script src="/vendor/handlebars/handlebars.runtime.js"></script> -->
+    <!-- <script src="/vendor/ember/ember.prod.js"></script> -->
+    <!-- @endif -->
+
+    <!-- <script src="/vendor/ember-data/ember-data.js"></script> -->
+    <script src="/vendor/loader.js"></script>
+    <!-- <script src="/vendor/ember-resolver/dist/ember-resolver.js"></script> -->
+    <!-- <script src="/vendor/ic-ajax/main.js"></script> -->
+
+  <!-- endbuild -->
+
+  <!-- build:js(tmp/result) /assets/app.min.js -->
+
+    <script src="/assets/app.js"></script>
+    <!-- <script src="/assets/templates.js"></script> -->
+
+  <!-- endbuild -->
+
+  <!-- @if dist=false -->
+  <!--
+  <style>
+    @keyframes domChanged { from { background: yellow; } }
+    @-webkit-keyframes domChanged { from { background: yellow; } }
+    .ember-view { animation: domChanged 1s; -webkit-animation: domChanged 1s; }
+  </style>
+   -->
+  <!-- @endif -->
+  <!-- @if tests=true -->
+  <link rel="stylesheet" href="/vendor/jasmine/lib/jasmine-core/jasmine.css">
+  <script src="/vendor/jasmine/lib/jasmine-core/jasmine.js"></script>
+  <script src="/vendor/jasmine/lib/jasmine-core/jasmine-html.js"></script>
+  <script src="/vendor/jasmine/lib/jasmine-core/boot/boot.js"></script>
+  <script src="/vendor/jasmine-jquery/lib/jasmine-jquery.js"></script>
+  <style>
+    #ember-testing-container {
+      position: absolute;
+      background: white;
+      bottom: 0;
+      right: 0;
+      width: 640px;
+      height: 384px;
+      overflow: auto;
+      z-index: 9999;
+      border: 1px solid #ccc;
+    }
+    #ember-testing {
+      zoom: 50%;
+    }
+  </style>
+  <!-- @endif -->
+
+</head>
+<body>
+  <!--[if lt IE 8]>
+    <p class="browsehappy">
+      You are using an <strong>outdated</strong> browser. Please
+      <a href="http://browsehappy.com/">upgrade your browser</a>
+      to improve your experience.
+    </p>
+  <![endif]-->
+  <div class="container">
+  </div>
+  <!-- @if tests=true -->
+  <script src="/spec/spec.js"></script>
+  <!-- <script src="/spec/test-helper.js"></script> -->
+  <script src="/spec/test-loader.js"></script>
+  <script src="/testem.js"></script>
+  <!-- @endif -->
+
+  <!-- @if tests=false -->
+  <script>
+    window.App = require("multiSceneMovie/app");
+  </script>
+
+  <div class="movie_control loading"></div>
+  <div class="movie_control finished hide"></div>
+
+  <div
+    id="movie"
+    data-frame-width=1280
+    data-frame-height=720
+    data-frames-count=300
+    data-fps=10
+    style="height:180px;width:320px;"
+  >
+  <div id="movie_strips" style="display:none;">
+    <i data-url="/assets/strip.png" class="strip"></i>
+  </div>
+  </div>
+  <!-- @endif -->
+</body>
+</html>
