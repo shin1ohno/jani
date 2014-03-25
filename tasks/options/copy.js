@@ -35,7 +35,6 @@ module.exports = {
       cwd: 'src/images',
       src: ['**/*.{png,gif,jpg,jpeg}'],
       dest: 'tmp/result/assets'
-
     }
     ]
   },

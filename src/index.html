@@ -57,15 +57,6 @@
 
   <!-- endbuild -->
 
-  <!-- @if dist=false -->
-  <!--
-  <style>
-    @keyframes domChanged { from { background: yellow; } }
-    @-webkit-keyframes domChanged { from { background: yellow; } }
-    .ember-view { animation: domChanged 1s; -webkit-animation: domChanged 1s; }
-  </style>
-   -->
-  <!-- @endif -->
   <!-- @if tests=true -->
   <link rel="stylesheet" href="/vendor/jasmine/lib/jasmine-core/jasmine.css">
   <script src="/vendor/jasmine/lib/jasmine-core/jasmine.js"></script>
@@ -99,8 +90,32 @@
       to improve your experience.
     </p>
   <![endif]-->
+
+  <!-- @if tests=false -->
   <div class="container">
+    <div class="movie_control loading">
+      <p>play movie</p>
+    </div>
+    <div class="movie_control finished hide">
+      <p>replay movie</p>
+    </div>
+    <div
+        id="movie"
+        data-frame-width=1280
+        data-frame-height=720
+        data-frames-count=300
+        data-fps=10
+        style="height:180px;width:320px;"
+      ></div>
+    <div id="movie_strips" style="display:none;">
+      <i data-url="/assets/strip.png" class="strip"></i>
+    </div>
+    <div id="contents" class="hide">
+      <img src="http://placehold.it/320x180">
+    </div>
   </div>
+  <!-- @endif -->
+
   <!-- @if tests=true -->
   <script src="/spec/spec.js"></script>
   <!-- <script src="/spec/test-helper.js"></script> -->
@@ -112,22 +127,6 @@
   <script>
     window.App = require("multiSceneMovie/app");
   </script>
-
-  <div class="movie_control loading"></div>
-  <div class="movie_control finished hide"></div>
-
-  <div
-    id="movie"
-    data-frame-width=1280
-    data-frame-height=720
-    data-frames-count=300
-    data-fps=10
-    style="height:180px;width:320px;"
-  >
-  <div id="movie_strips" style="display:none;">
-    <i data-url="/assets/strip.png" class="strip"></i>
-  </div>
-  </div>
   <!-- @endif -->
 </body>
 </html>

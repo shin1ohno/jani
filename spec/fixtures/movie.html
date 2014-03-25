@@ -1,14 +1,20 @@
+<div class="movie_control loading">
+  <p>play movie</p>
+</div>
+<div class="movie_control finished hide">
+  <p>replay movie</p>
+</div>
 <div
-  id="movie"
-  class="hide"
-  data-frame-width=1280
-  data-frame-height=720
-  data-frames-count=300
-  data-fps=30
-  style="height:180px;width:320px;"
->
+    id="movie"
+    data-frame-width=1280
+    data-frame-height=720
+    data-frames-count=300
+    data-fps=30
+    style="height:180px;width:320px;"
+  ></div>
+<div id="movie_strips" style="display:none;">
+  <i data-url="/assets/strip.png" class="strip"></i>
 </div>
-<div id="movie_strips">
-  <i class="strip" data-src="/assets/strip.png">
+<div id="contents" class="hide">
+  <img src="http://placehold.it/320x180">
 </div>
-

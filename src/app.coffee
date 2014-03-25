@@ -6,43 +6,58 @@
 `import Scene from "multiSceneMovie/scene"`
 
 $( ()->
+
+  createMoviePlayScene = (movie)->
+    moviePlayStage = new MovieStage(movie)
+    movieScene = new Scene(moviePlayStage)
+    movieScene.finish()
+    movieScene
+
+  createMovieLoadingScene = (loadingSceneElement) ->
+    movieLoadStage = new Stage(loadingSceneElement)
+    movieLoadScene = new Scene(movieLoadStage)
+    movieLoadScene.sceneDidStart = movie.loadMovie
+    movieLoadScene.start()
+    movieLoadScene
+
+  createMovieFinishScene = (finishSceneElement) ->
+    movieFinishStage = new Stage(finishSceneElement)
+    movieFinishScene = new Scene(movieFinishStage)
+    movieFinishScene.finish()
+    movieFinishScene
+
+  createContentScene = (contentSceneElement) ->
+    contentStage = new Stage(contentSceneElement)
+    contentScene = new Scene(contentStage)
+    contentScene
+
+  composeScenes = (movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
+    movie.movieDidLoad = ->
+      movieLoadScene.finish()
+      movieScene.start()
+
+    movie.movieDidFinish = ->
+      movieScene.finish()
+      movieFinishScene.start()
+
+    movieScene.sceneDidStart = ->
+      movie.rewind()
+      movie.play() if @stage.detectAppearance()
+
+    movieScene.sceneDidFinish = contentScene.start
+
+    $(document).bind('scroll', movieScene.stage.detectAppearance)
+    $('.movie_control.finished').bind('click', ->
+      movieFinishScene.finish()
+      movieScene.start()
+    )
+
   screenElement = document.getElementById('movie')
   stripElements = document.getElementById('movie_strips').getElementsByClassName('strip')
   movie = Movie.createFromHTMLElement(screenElement, stripElements)
-
-  moviePlayStage = new MovieStage(movie)
-  movieScene = new Scene(moviePlayStage)
-  movieScene.finish()
-
-  movieLoadStage = new Stage($(".movie_control.loading")[0])
-  movieLoadScene = new Scene(movieLoadStage)
-  movieLoadScene.sceneDidStart = movie.loadMovie
-  movieLoadScene.start()
-
-  movieFinishStage = new Stage($(".movie_control.finished")[0])
-  movieFinishScene = new Scene(movieFinishStage)
-  movieFinishScene.finish()
-
-  movie.movieDidLoad = ->
-    movieLoadScene.finish()
-    movieScene.start()
-
-  movie.movieDidFinish = ->
-    movieScene.finish()
-    movieFinishScene.start()
-
-  contentStage = new Stage(document.getElementById('contents'))
-  contentScene = new Scene(contentStage)
-  movieScene.sceneDidFinish = contentScene.start
-
-  movieScene.sceneDidStart = ->
-    movie.rewind()
-    movie.play() if @stage.detectAppearance()
-
-  $(document).bind('scroll', moviePlayStage.detectAppearance)
-  $('#contents .button_region').bind('click', contentScene.finish)
-  $('.movie_control.finished').bind('click',->
-    movieFinishScene.finish()
-    movieScene.start()
-  )
+  movieScene = createMoviePlayScene(movie)
+  movieLoadScene = createMovieLoadingScene($(".movie_control.loading")[0])
+  movieFinishScene = createMovieFinishScene($(".movie_control.finished")[0])
+  contentScene = createContentScene(document.getElementById('contents'))
+  composeScenes(movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
 )
