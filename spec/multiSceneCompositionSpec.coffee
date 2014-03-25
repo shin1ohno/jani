@@ -8,7 +8,7 @@ describe "end to end: multi scene composition", ->
     @finished = @composed[2]
     @content = @composed[3]
     jasmine.clock().install()
-    @classList = (scene) -> scene.stage.element.classList
+    @isHidden = (scene) -> scene.stage.element.classList.contains("hide")
 
   afterEach ->
     jasmine.clock().uninstall()
@@ -18,20 +18,20 @@ describe "end to end: multi scene composition", ->
     expect(scene.constructor.name).toBe("Scene") for scene in @composed
 
   it "is loading movie at start", ->
-    expect(@classList(@loading).contains("hide")).toBe(false)
-    expect(@classList(@playing).contains("hide")).toBe(true)
-    expect(@classList(@finished).contains("hide")).toBe(true)
-    expect(@classList(@content).contains("hide")).toBe(true)
+    expect(@isHidden(@loading)).toBe(false)
+    expect(@isHidden(@playing)).toBe(true)
+    expect(@isHidden(@finished)).toBe(true)
+    expect(@isHidden(@content)).toBe(true)
 
   describe "after movie strips loaded", ->
     beforeEach ->
       @playing.stage.movie.movieDidLoad()
 
     it "is ready to play movie", ->
-      expect(@classList(@loading).contains("hide")).toBe(true)
-      expect(@classList(@playing).contains("hide")).toBe(false)
-      expect(@classList(@finished).contains("hide")).toBe(true)
-      expect(@classList(@content).contains("hide")).toBe(true)
+      expect(@isHidden(@loading)).toBe(true)
+      expect(@isHidden(@playing)).toBe(false)
+      expect(@isHidden(@finished)).toBe(true)
+      expect(@isHidden(@content)).toBe(true)
 
     it "keeps pausing movie before movie stage appears", ->
       expect(@playing.stage.movie.screen.currentStrip().frameIndex).toBe(0)
@@ -50,7 +50,19 @@ describe "end to end: multi scene composition", ->
       jasmine.clock().tick(40000)
 
     it "shows replay UI and content", ->
-      expect(@classList(@loading).contains("hide")).toBe(true)
-      expect(@classList(@playing).contains("hide")).toBe(true)
-      expect(@classList(@finished).contains("hide")).toBe(false)
-      expect(@classList(@content).contains("hide")).toBe(false)
+      expect(@isHidden(@loading)).toBe(true)
+      expect(@isHidden(@playing)).toBe(true)
+      expect(@isHidden(@finished)).toBe(false)
+      expect(@isHidden(@content)).toBe(false)
+
+    describe "when replay UI clicked", ->
+      beforeEach ->
+        $('.movie_control.finished').click()
+        @playing.stage.movie.movieDidLoad()
+        @playing.stage.stageDidAppear()
+
+      it "rewind and replay movie", ->
+        expect(@isHidden(@loading)).toBe(true)
+        expect(@isHidden(@playing)).toBe(false)
+        expect(@isHidden(@finished)).toBe(false)
+        expect(@isHidden(@content)).toBe(false)

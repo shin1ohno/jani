@@ -4,6 +4,7 @@
 `import Stage from "multiSceneMovie/stage"`
 `import MovieStage from "multiSceneMovie/movieStage"`
 `import Scene from "multiSceneMovie/scene"`
+
 composed = undefined
 
 $( ()->
@@ -48,7 +49,7 @@ $( ()->
     movieScene.sceneDidFinish = contentScene.start
 
     $(document).bind('scroll', movieScene.stage.detectAppearance)
-    $('.movie_control.finished').bind('click', ->
+    $(movieFinishScene.stage.element).bind('click', ->
       movieFinishScene.finish()
       movieScene.start()
     )
