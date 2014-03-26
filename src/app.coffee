@@ -58,11 +58,15 @@ $( ()->
 
   screenElement = document.getElementById('movie')
   stripElements = document.getElementById('movie_strips').getElementsByClassName('strip')
+  movieLoadElement = $(".movie_control.loading")[0]
+  movieFinishElement = $(".movie_control.finished")[0]
+  contentElement = document.getElementById('contents')
+
   movie = Movie.createFromHTMLElement(screenElement, stripElements)
   movieScene = createMoviePlayScene(movie)
-  movieLoadScene = createMovieLoadingScene($(".movie_control.loading")[0], movie)
-  movieFinishScene = createMovieFinishScene($(".movie_control.finished")[0])
-  contentScene = createContentScene(document.getElementById('contents'))
+  movieLoadScene = createMovieLoadingScene(movieLoadElement, movie)
+  movieFinishScene = createMovieFinishScene(movieFinishElement)
+  contentScene = createContentScene(contentElement)
   composed = composeScenes(movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
 )
 `export default composed`
