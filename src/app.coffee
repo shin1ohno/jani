@@ -15,7 +15,7 @@ $( ()->
     movieScene.finish()
     movieScene
 
-  createMovieLoadingScene = (loadingSceneElement) ->
+  createMovieLoadingScene = (loadingSceneElement, movie) ->
     movieLoadStage = new Stage(loadingSceneElement)
     movieLoadScene = new Scene(movieLoadStage)
     movieLoadScene.sceneDidStart = movie.loadMovie
@@ -60,7 +60,7 @@ $( ()->
   stripElements = document.getElementById('movie_strips').getElementsByClassName('strip')
   movie = Movie.createFromHTMLElement(screenElement, stripElements)
   movieScene = createMoviePlayScene(movie)
-  movieLoadScene = createMovieLoadingScene($(".movie_control.loading")[0])
+  movieLoadScene = createMovieLoadingScene($(".movie_control.loading")[0], movie)
   movieFinishScene = createMovieFinishScene($(".movie_control.finished")[0])
   contentScene = createContentScene(document.getElementById('contents'))
   composed = composeScenes(movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
