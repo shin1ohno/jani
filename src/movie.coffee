@@ -15,7 +15,7 @@ class Movie
 
       image.src = strip.image_uri
 
-  movieDidLoad: =>
+  movieDidLoad: ->
 
   play: ->
     return if @timerId #already played

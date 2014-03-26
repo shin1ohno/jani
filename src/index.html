@@ -93,26 +93,41 @@
 
   <!-- @if tests=false -->
   <div class="container">
-    <div class="movie_control loading">
-      <p>play movie</p>
-    </div>
-    <div class="movie_control finished hide">
-      <p>replay movie</p>
-    </div>
     <div
-        id="movie"
-        data-frame-width=1280
-        data-frame-height=720
-        data-frames-count=303
-        data-fps=30
-        style="height:180px;width:320px;"
-      ></div>
-    <div id="movie_strips" style="display:none;">
-      <i data-url="/assets/strip.png" class="strip"></i>
+        id="stages_container"
+        data-loading-stage = "loading_scene"
+        data-finished-stage = "finished_scene"
+        data-content-stage = "content_scene"
+        data-movie-stage = "playing_scene"
+      >
+      <div class="movie_control loading" id="loading_scene">
+        <p>play movie</p>
+      </div>
+
+      <div class="movie_control finished hide" id="finished_scene">
+        <p>replay movie</p>
+      </div>
+
+      <div id="playing_scene" data-screen="movie" data-strips="movie_strips" data-strips-class="strip">
+        <div
+            id="movie"
+            data-frame-width=1280
+            data-frame-height=720
+            data-frames-count=300
+            data-fps=30
+          >
+        </div>
+        <div id="movie_strips" class="hide">
+          <i data-url="/assets/strip.png" class="strip"></i>
+        </div>
+      </div>
+
+      <div id="content_scene" class="hide">
+        <img src="http://placehold.it/320x180">
+      </div>
     </div>
-    <div id="contents" class="hide">
-      <img src="http://placehold.it/320x180">
-    </div>
+
+
   </div>
   <!-- @endif -->
 

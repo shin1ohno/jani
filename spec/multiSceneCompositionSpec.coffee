@@ -2,7 +2,7 @@ describe "end to end: multi scene composition", ->
   beforeEach ->
     jasmine.getFixtures().fixturesPath = "fixtures"
     loadFixtures("movie.html")
-    @composed = (require "multiSceneMovie/app")["default"]
+    @composed = (require "multiSceneMovie/app")["default"]()
     @loading = @composed[0]
     @playing = @composed[1]
     @finished = @composed[2]

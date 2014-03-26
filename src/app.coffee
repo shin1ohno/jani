@@ -5,7 +5,7 @@
 `import MovieStage from "multiSceneMovie/movieStage"`
 `import Scene from "multiSceneMovie/scene"`
 
-composed = undefined
+composeAll = ->
 
 $( ()->
 
@@ -18,8 +18,6 @@ $( ()->
   createMovieLoadingScene = (loadingSceneElement, movie) ->
     movieLoadStage = new Stage(loadingSceneElement)
     movieLoadScene = new Scene(movieLoadStage)
-    movieLoadScene.sceneDidStart = movie.loadMovie
-    movieLoadScene.start()
     movieLoadScene
 
   createMovieFinishScene = (finishSceneElement) ->
@@ -34,9 +32,11 @@ $( ()->
     contentScene
 
   composeScenes = (movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
+    movieLoadScene.sceneDidStart = movie.loadMovie
+    movieLoadScene.sceneDidFinish = movieScene.start
+
     movie.movieDidLoad = ->
       movieLoadScene.finish()
-      movieScene.start()
 
     movie.movieDidFinish = ->
       movieScene.finish()
@@ -48,25 +48,32 @@ $( ()->
 
     movieScene.sceneDidFinish = contentScene.start
 
-    $(document).bind('scroll', movieScene.stage.detectAppearance)
-    $(movieFinishScene.stage.element).bind('click', ->
+    $(document).bind("scroll", movieScene.stage.detectAppearance)
+    $(movieFinishScene.stage.element).bind("click", ->
       movieFinishScene.finish()
       movieScene.start()
     )
 
+    movieLoadScene.start()
     [movieLoadScene, movieScene, movieFinishScene, contentScene]
 
-  screenElement = document.getElementById('movie')
-  stripElements = document.getElementById('movie_strips').getElementsByClassName('strip')
-  movieLoadElement = $(".movie_control.loading")[0]
-  movieFinishElement = $(".movie_control.finished")[0]
-  contentElement = document.getElementById('contents')
+  return unless document.getElementById("stages_container")
 
-  movie = Movie.createFromHTMLElement(screenElement, stripElements)
-  movieScene = createMoviePlayScene(movie)
-  movieLoadScene = createMovieLoadingScene(movieLoadElement, movie)
+  stagesDataset = document.getElementById("stages_container").dataset
+  movieLoadElement = document.getElementById(stagesDataset["loadingStage"])
+  movieFinishElement = document.getElementById(stagesDataset["finishedStage"])
+  contentElement = document.getElementById(stagesDataset["contentStage"])
+
+  movieDataset = document.getElementById(document.getElementById("stages_container").dataset["movieStage"]).dataset
+  screenElement = document.getElementById(movieDataset["screen"])
+  stripElements = document.getElementById(movieDataset["strips"]).getElementsByClassName(movieDataset["stripsClass"])
+  window.movie = Movie.createFromHTMLElement(screenElement, stripElements)
+
+  window.movieScene = createMoviePlayScene(movie)
+  window.movieLoadScene = createMovieLoadingScene(movieLoadElement, movie)
   movieFinishScene = createMovieFinishScene(movieFinishElement)
   contentScene = createContentScene(contentElement)
-  composed = composeScenes(movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
+
+  composeAll = -> composeScenes(movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
 )
-`export default composed`
+`export default composeAll`

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>App</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="assets/e2ce8b69.app.min.css">
+
+  <!-- for more details visit: https://github.com/yeoman/grunt-usemin -->
+
+  <script src="assets/d41d8cd9.config.min.js"></script>
+
+  <script src="assets/d274db12.vendor.min.js"></script>
+
+  <script src="assets/b0092143.app.min.js"></script>
+
+</head>
+<body>
+  <!--[if lt IE 8]>
+    <p class="browsehappy">
+      You are using an <strong>outdated</strong> browser. Please
+      <a href="http://browsehappy.com/">upgrade your browser</a>
+      to improve your experience.
+    </p>
+  <![endif]-->
+
+  <div class="container">
+    <div
+        id="stages_container"
+        data-stages="loading_scene finished_scene playing_scene contents_scene"
+      >
+    </div>
+
+    <div class="movie_control loading" id="loading_scene">
+      <p>play movie</p>
+    </div>
+    <div class="movie_control finished hide" id="finished_scene">
+      <p>replay movie</p>
+    </div>
+    <div id="playing_scene">
+      <div
+          id="movie"
+          data-frame-width=1280
+          data-frame-height=720
+          data-frames-count=300
+          data-fps=30
+          style="height:180px;width:320px;"
+        >
+      </div>
+      <div id="movie_strips" style="display:none;">
+        <i data-url="assets/strip.png" class="strip"></i>
+      </div>
+    </div>
+    <div id="contents_scene" class="hide">
+      <img src="http://placehold.it/320x180">
+    </div>
+
+  </div>
+  <script>
+    window.App = require("multiSceneMovie/app");
+  </script>
+</body>
+</html>
