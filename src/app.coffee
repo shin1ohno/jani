@@ -37,12 +37,12 @@ composeScenes = (movie, movieScene, movieLoadScene, movieFinishScene, contentSce
 createAndComposeScenes = (containerElementId) ->
   return unless document.getElementById(containerElementId)
 
-  stagesDataset = document.getElementById("stages_container").dataset
+  stagesDataset = document.getElementById(containerElementId).dataset
   movieLoadElement = document.getElementById(stagesDataset["loadingStage"])
   movieFinishElement = document.getElementById(stagesDataset["finishedStage"])
   contentElement = document.getElementById(stagesDataset["contentStage"])
 
-  movieDataset = document.getElementById(document.getElementById("stages_container").dataset["movieStage"]).dataset
+  movieDataset = document.getElementById(document.getElementById(containerElementId).dataset["movieStage"]).dataset
   screenElement = document.getElementById(movieDataset["screen"])
   stripElements = document.getElementById(movieDataset["strips"]).getElementsByClassName(movieDataset["stripsClass"])
   movie = Movie.createFromHTMLElement(screenElement, stripElements)
