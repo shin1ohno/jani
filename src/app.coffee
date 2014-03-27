@@ -68,10 +68,6 @@ createAndComposeScenes = (containerElementId) ->
   movieFinishScene = createMovieFinishScene(movieFinishElement)
   contentScene = createContentScene(contentElement)
 
-  window.movieScene = movieScene
-  window.movieLoadScene = movieLoadScene
-  window.movieFinishScene = movieFinishScene
-
   composeScenes(movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
   [movieLoadScene, movieScene, movieFinishScene, contentScene]
 
