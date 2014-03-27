@@ -5,59 +5,53 @@
 `import MovieStage from "multiSceneMovie/movieStage"`
 `import Scene from "multiSceneMovie/scene"`
 
-composeAll = ->
+createMoviePlayScene = (movie)->
+  moviePlayStage = new MovieStage(movie)
+  movieScene = new Scene(moviePlayStage)
+  movieScene
 
-$( ()->
+createMovieLoadingScene = (loadingSceneElement, movie) ->
+  movieLoadStage = new Stage(loadingSceneElement)
+  movieLoadScene = new Scene(movieLoadStage)
+  movieLoadScene
 
-  createMoviePlayScene = (movie)->
-    moviePlayStage = new MovieStage(movie)
-    movieScene = new Scene(moviePlayStage)
+createMovieFinishScene = (finishSceneElement) ->
+  movieFinishStage = new Stage(finishSceneElement)
+  movieFinishScene = new Scene(movieFinishStage)
+  movieFinishScene
+
+createContentScene = (contentSceneElement) ->
+  contentStage = new Stage(contentSceneElement)
+  contentScene = new Scene(contentStage)
+  contentScene
+
+composeScenes = (movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
+  movieLoadScene.sceneDidStart = movie.loadMovie
+  movieLoadScene.sceneDidFinish = movieScene.start
+
+  movie.movieDidLoad = ->
+    movieLoadScene.finish()
+
+  movie.movieDidFinish = ->
     movieScene.finish()
-    movieScene
+    movieFinishScene.start()
 
-  createMovieLoadingScene = (loadingSceneElement, movie) ->
-    movieLoadStage = new Stage(loadingSceneElement)
-    movieLoadScene = new Scene(movieLoadStage)
-    movieLoadScene
+  movieScene.sceneDidStart = ->
+    movie.rewind()
+    movie.play() if @stage.detectAppearance()
 
-  createMovieFinishScene = (finishSceneElement) ->
-    movieFinishStage = new Stage(finishSceneElement)
-    movieFinishScene = new Scene(movieFinishStage)
+  movieScene.sceneDidFinish = contentScene.start
+
+  $(document).bind("scroll", movieScene.stage.detectAppearance)
+  $(movieFinishScene.stage.element).bind("click", ->
     movieFinishScene.finish()
-    movieFinishScene
+    movieScene.start()
+  )
 
-  createContentScene = (contentSceneElement) ->
-    contentStage = new Stage(contentSceneElement)
-    contentScene = new Scene(contentStage)
-    contentScene
+  [movieLoadScene, movieScene, movieFinishScene, contentScene]
 
-  composeScenes = (movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
-    movieLoadScene.sceneDidStart = movie.loadMovie
-    movieLoadScene.sceneDidFinish = movieScene.start
-
-    movie.movieDidLoad = ->
-      movieLoadScene.finish()
-
-    movie.movieDidFinish = ->
-      movieScene.finish()
-      movieFinishScene.start()
-
-    movieScene.sceneDidStart = ->
-      movie.rewind()
-      movie.play() if @stage.detectAppearance()
-
-    movieScene.sceneDidFinish = contentScene.start
-
-    $(document).bind("scroll", movieScene.stage.detectAppearance)
-    $(movieFinishScene.stage.element).bind("click", ->
-      movieFinishScene.finish()
-      movieScene.start()
-    )
-
-    movieLoadScene.start()
-    [movieLoadScene, movieScene, movieFinishScene, contentScene]
-
-  return unless document.getElementById("stages_container")
+createAndComposeScenes = (containerElementId) ->
+  return unless document.getElementById(containerElementId)
 
   stagesDataset = document.getElementById("stages_container").dataset
   movieLoadElement = document.getElementById(stagesDataset["loadingStage"])
@@ -67,13 +61,18 @@ $( ()->
   movieDataset = document.getElementById(document.getElementById("stages_container").dataset["movieStage"]).dataset
   screenElement = document.getElementById(movieDataset["screen"])
   stripElements = document.getElementById(movieDataset["strips"]).getElementsByClassName(movieDataset["stripsClass"])
-  window.movie = Movie.createFromHTMLElement(screenElement, stripElements)
+  movie = Movie.createFromHTMLElement(screenElement, stripElements)
 
-  window.movieScene = createMoviePlayScene(movie)
-  window.movieLoadScene = createMovieLoadingScene(movieLoadElement, movie)
+  movieScene = createMoviePlayScene(movie)
+  movieLoadScene = createMovieLoadingScene(movieLoadElement, movie)
   movieFinishScene = createMovieFinishScene(movieFinishElement)
   contentScene = createContentScene(contentElement)
 
-  composeAll = -> composeScenes(movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
-)
-`export default composeAll`
+  window.movieScene = movieScene
+  window.movieLoadScene = movieLoadScene
+  window.movieFinishScene = movieFinishScene
+
+  composeScenes(movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
+  [movieLoadScene, movieScene, movieFinishScene, contentScene]
+
+`export default createAndComposeScenes`

@@ -100,7 +100,7 @@
         data-content-stage = "content_scene"
         data-movie-stage = "playing_scene"
       >
-      <div class="movie_control loading" id="loading_scene">
+      <div class="movie_control loading hide" id="loading_scene">
         <p>play movie</p>
       </div>
 
@@ -111,6 +111,7 @@
       <div id="playing_scene" data-screen="movie" data-strips="movie_strips" data-strips-class="strip">
         <div
             id="movie"
+            class="hide"
             data-frame-width=1280
             data-frame-height=720
             data-frames-count=300
@@ -140,7 +141,8 @@
 
   <!-- @if tests=false -->
   <script>
-    window.App = require("multiSceneMovie/app");
+    var stages = require("multiSceneMovie/app")["default"]("stages_container");
+    stages[0].start()
   </script>
   <!-- @endif -->
 </body>

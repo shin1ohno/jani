@@ -7,7 +7,7 @@ class MovieStage extends Stage
     @ad = new AppearanceDetector(@element)
     @ad.didAppear = @stageDidAppear
     @ad.didDisappear = @stageDidDisappear
-    @movie.play() if @ad.visible()
+    @movie.play() if @detectAppearance()
 
   stageDidAppear: =>
     @movie.play()
