@@ -5,25 +5,9 @@
 `import MovieStage from "multiSceneMovie/movieStage"`
 `import Scene from "multiSceneMovie/scene"`
 
-createMoviePlayScene = (movie)->
-  moviePlayStage = new MovieStage(movie)
-  movieScene = new Scene(moviePlayStage)
-  movieScene
+createMovieScene = (movie)-> new Scene(new MovieStage(movie))
 
-createMovieLoadingScene = (loadingSceneElement, movie) ->
-  movieLoadStage = new Stage(loadingSceneElement)
-  movieLoadScene = new Scene(movieLoadStage)
-  movieLoadScene
-
-createMovieFinishScene = (finishSceneElement) ->
-  movieFinishStage = new Stage(finishSceneElement)
-  movieFinishScene = new Scene(movieFinishStage)
-  movieFinishScene
-
-createContentScene = (contentSceneElement) ->
-  contentStage = new Stage(contentSceneElement)
-  contentScene = new Scene(contentStage)
-  contentScene
+createScene = (sceneElement) -> new Scene(new Stage(sceneElement))
 
 composeScenes = (movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
   movieLoadScene.sceneDidStart = movie.loadMovie
@@ -63,10 +47,10 @@ createAndComposeScenes = (containerElementId) ->
   stripElements = document.getElementById(movieDataset["strips"]).getElementsByClassName(movieDataset["stripsClass"])
   movie = Movie.createFromHTMLElement(screenElement, stripElements)
 
-  movieScene = createMoviePlayScene(movie)
-  movieLoadScene = createMovieLoadingScene(movieLoadElement, movie)
-  movieFinishScene = createMovieFinishScene(movieFinishElement)
-  contentScene = createContentScene(contentElement)
+  movieScene = createMovieScene(movie)
+  movieLoadScene = createScene(movieLoadElement)
+  movieFinishScene = createScene(movieFinishElement)
+  contentScene = createScene(contentElement)
 
   composeScenes(movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
   [movieLoadScene, movieScene, movieFinishScene, contentScene]
