@@ -42,11 +42,11 @@ composeScenes = (movie, movieScene, movieLoadScene, movieFinishScene, contentSce
 
   movieScene.sceneDidFinish = contentScene.start
 
-  $(document).bind("scroll", movieScene.stage.detectAppearance)
-  $(movieFinishScene.stage.element).bind("click", ->
+  document.addEventListener("scroll", movieScene.stage.detectAppearance, false)
+  movieFinishScene.stage.element.addEventListener("click", ->
     movieFinishScene.finish()
     movieScene.start()
-  )
+  , false)
 
   [movieLoadScene, movieScene, movieFinishScene, contentScene]
 
