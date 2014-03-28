@@ -3,7 +3,7 @@
 
 class Movie
   constructor: (@screen, @strips, @fps) ->
-    @screen.strips = @strips
+    @screen.setStrips(@strips)
     @_loaded = 0
 
   loadMovie: =>
@@ -24,11 +24,11 @@ class Movie
     else
       @movieDidResume()
     @timerId = setInterval(=>
-      if @isAtLastFrame() #TODO: implement multi strip
+      if @isAtLastFrame()
         @pause()
         @movieDidFinish()
       @screen.showCurrentFrame()
-      @screen.currentStrip().moveFrameToNext()
+      @screen.moveFrameToNext()
     , 1000/@fps)
 
   pause: ->
@@ -36,19 +36,11 @@ class Movie
     clearInterval(@timerId) if @timerId
     @timerId = undefined
 
-  rewind: ->
-    #TODO: implement multi strip
-    @screen.currentStrip().frameIndex = 0
+  rewind: -> @screen.moveFrameToFirst()
 
-  isAtFirstFrame: ->
-    return false unless @screen.currentStrip() == @strips[0]
-    return true if @screen.currentStrip().frameIndex == 0
-    false
+  isAtFirstFrame: -> @screen.isAtFirstFrame()
 
-  isAtLastFrame: ->
-    return false unless @screen.currentStrip() == @strips[@strips.length - 1]
-    return true if @screen.currentStrip().isAtLastFrame()
-    false
+  isAtLastFrame: -> @screen.isAtLastFrame()
 
   movieDidStart: ->
   movieDidResume: ->

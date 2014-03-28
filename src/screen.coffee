@@ -3,6 +3,7 @@ class Screen
     @setDefaultImage()
 
   setStrips: (@strips) ->
+    @currentStipIndex = 0
 
   setDefaultImage: ->
     if @defaultImageUrl()
@@ -19,6 +20,23 @@ class Screen
   showCurrentFrame: ->
     defaultStyle = @element.style.cssText
     @element.style.cssText = defaultStyle + @currentStrip().toCssText()
-  currentStrip: -> @strips[0] #TODO: implement multi strip
+
+  currentStrip: -> @strips[@currentStipIndex] #TODO: implement multi strip
+
+  moveFrameToNext: -> @currentStrip().moveFrameToNext()
+
+  moveFrameToFirst: ->
+    @currentStipIndex = 0
+    @currentStrip().frameIndex = 0
+
+  isAtFirstFrame: ->
+    return false unless @currentStrip() == @strips[0]
+    return true if @currentStrip().frameIndex == 0
+    false
+
+  isAtLastFrame: ->
+    return false unless @currentStrip() == @strips[@strips.length - 1]
+    return true if @currentStrip().isAtLastFrame()
+    false
 
 `export default Screen`
