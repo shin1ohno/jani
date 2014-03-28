@@ -2,8 +2,7 @@ class Screen
   constructor: (@element) ->
     @setDefaultImage()
 
-  setStrips: (@strips) ->
-    @currentStipIndex = 0
+  setStrips: (@strips) -> @currentStipIndex = 0
 
   setDefaultImage: ->
     if @defaultImageUrl()
@@ -21,9 +20,13 @@ class Screen
     defaultStyle = @element.style.cssText
     @element.style.cssText = defaultStyle + @currentStrip().toCssText()
 
-  currentStrip: -> @strips[@currentStipIndex] #TODO: implement multi strip
+  currentStrip: -> @strips[@currentStipIndex]
 
-  moveFrameToNext: -> @currentStrip().moveFrameToNext()
+  moveFrameToNext: ->
+    if @currentStrip().isAtLastFrame()
+      @currentStrip().frameIndex = 0
+      @currentStipIndex++ unless @currentStrip() == @strips[@strips.length - 1]
+    @currentStrip().moveFrameToNext()
 
   moveFrameToFirst: ->
     @currentStipIndex = 0

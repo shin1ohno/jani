@@ -51,7 +51,7 @@ class Movie
     movieData = screenElement.dataset
     screen = new Screen(screenElement)
     strips = []
-    strips.push(new Strip(strip.dataset.url, parseInt(movieData.frameWidth, 10), parseInt(movieData.frameHeight, 10), parseInt(movieData.framesCount, 10))) for strip in stripElements
+    strips.push(new Strip(strip.dataset.url, parseInt(movieData.frameWidth, 10), parseInt(movieData.frameHeight, 10), parseInt(strip.dataset.framesCount, 10))) for strip in stripElements
     new Movie(screen, strips, parseInt(movieData.fps, 10))
 
 `export default Movie`
