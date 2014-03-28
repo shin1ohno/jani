@@ -10,12 +10,12 @@ class Strip
     @frames[@frameIndex]
 
   moveFrameToNext: ->
-    if @isLastFrame()
+    if @isAtLastFrame()
       @frameIndex = 0
     else
       @frameIndex++
 
-  isLastFrame: ->
+  isAtLastFrame: ->
     @frameIndex == @framesCount- 1
 
   toCssText: ->

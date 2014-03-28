@@ -20,7 +20,7 @@ describe "single strip movie", ->
     it "plays to last frame", ->
       @movie.play()
       jasmine.clock().tick(10000);
-      expect(@movie.screen.currentStrip().isLastFrame()).toBe(true)
+      expect(@movie.isAtLastFrame()).toBe(true)
 
     it "pause and plays to last frame", ->
       @movie.play()
@@ -28,4 +28,4 @@ describe "single strip movie", ->
       @movie.pause()
       @movie.play()
       jasmine.clock().tick(5000);
-      expect(@movie.screen.currentStrip().isLastFrame()).toBe(true)
+      expect(@movie.isAtLastFrame()).toBe(true)

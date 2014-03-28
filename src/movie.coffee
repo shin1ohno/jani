@@ -19,8 +19,12 @@ class Movie
 
   play: ->
     return if @timerId #already played
+    if @isAtFirstFrame()
+      @movieDidStart()
+    else
+      @movieDidResume()
     @timerId = setInterval(=>
-      if @screen.currentStrip().isLastFrame() #TODO: implement multi strip
+      if @isAtLastFrame()
         @pause()
         @movieDidFinish()
       @screen.showCurrentFrame()
@@ -28,6 +32,7 @@ class Movie
     , 1000/@fps)
 
   pause: ->
+    @movieDidPause() unless @isAtLastFrame()
     clearInterval(@timerId) if @timerId
     @timerId = undefined
 
@@ -35,6 +40,19 @@ class Movie
     #TODO: implement multi strip
     @screen.currentStrip().frameIndex = 0
 
+  isAtFirstFrame: ->
+    return false unless @screen.currentStrip() == @strips[0]
+    return true if @screen.currentStrip().frameIndex == 0
+    false
+
+  isAtLastFrame: ->
+    return false unless @screen.currentStrip() == @strips[@strips.length - 1]
+    return true if @screen.currentStrip().isAtLastFrame()
+    false
+
+  movieDidStart: ->
+  movieDidResume: ->
+  movieDidPause: ->
   movieDidFinish: ->
 
   @createFromHTMLElement: (screenElement, stripElements) ->

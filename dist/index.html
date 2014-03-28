@@ -7,15 +7,15 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="assets/08a5ae22.app.min.css">
+  <link rel="stylesheet" href="/assets/a6035c60.app.min.css">
 
   <!-- for more details visit: https://github.com/yeoman/grunt-usemin -->
 
-  <script src="assets/d41d8cd9.config.min.js"></script>
+  <script src="/assets/d41d8cd9.config.min.js"></script>
 
-  <script src="assets/5ee5a729.vendor.min.js"></script>
+  <script src="/assets/5ee5a729.vendor.min.js"></script>
 
-  <script src="assets/408a5487.app.min.js"></script>
+  <script src="/assets/1c1c72d2.app.min.js"></script>
 
 </head>
 <body>
@@ -60,7 +60,7 @@
           >
         </div>
         <div id="movie_strips" class="hide">
-          <i data-url="assets/time_code.png" class="strip"></i>
+          <i data-url="/assets/time_code.png" class="strip"></i>
         </div>
       </div>
 
@@ -72,8 +72,8 @@
 
   </div>
   <script>
-    var stages = require("multiSceneMovie/app")["default"]("stages_container");
-    stages[0].start()
+    var MultiSceneMovie = require("multiSceneMovie/app")["default"];
+    (new MultiSceneMovie("stages_container")).startScenes()
   </script>
 </body>
 </html>

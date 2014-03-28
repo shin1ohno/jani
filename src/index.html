@@ -32,10 +32,6 @@
   <!-- endbuild -->
 
   <!-- build:js(tmp/result) /assets/vendor.min.js -->
-    <!-- @if tests=true -->
-    <script src="/vendor/jquery/dist/jquery.js"></script>
-    <!-- @endif -->
-
     <!-- @if dist=false -->
     <!-- <script src="/vendor/handlebars/handlebars.js"></script> -->
     <!-- <script src="/vendor/ember/ember.js"></script> -->
@@ -60,6 +56,7 @@
 
   <!-- @if tests=true -->
   <link rel="stylesheet" href="/vendor/jasmine/lib/jasmine-core/jasmine.css">
+  <script src="/vendor/jquery/dist/jquery.js"></script>
   <script src="/vendor/jasmine/lib/jasmine-core/jasmine.js"></script>
   <script src="/vendor/jasmine/lib/jasmine-core/jasmine-html.js"></script>
   <script src="/vendor/jasmine/lib/jasmine-core/boot/boot.js"></script>
@@ -148,8 +145,8 @@
 
   <!-- @if tests=false -->
   <script>
-    var stages = require("multiSceneMovie/app")["default"]("stages_container");
-    stages[0].start()
+    var MultiSceneMovie = require("multiSceneMovie/app")["default"];
+    (new MultiSceneMovie("stages_container")).startScenes()
   </script>
   <!-- @endif -->
 </body>
