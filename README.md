@@ -1,7 +1,7 @@
-![](https://api.travis-ci.org/shin1ohno/jani.svg)
-
 multiSceneMovie
 ====
+
+[![Build Status](https://travis-ci.org/shin1ohno/jani.svg?branch=master)](https://travis-ci.org/shin1ohno/jani)
 
 Animation JPEG/PNG strip with JavaScript
 
