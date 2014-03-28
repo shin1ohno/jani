@@ -1,3 +1,5 @@
+![](https://api.travis-ci.org/shin1ohno/jani.svg)
+
 multiSceneMovie
 ====
 
