@@ -24,7 +24,7 @@ class Movie
     else
       @movieDidResume()
     @timerId = setInterval(=>
-      if @isAtLastFrame()
+      if @isAtLastFrame() #TODO: implement multi strip
         @pause()
         @movieDidFinish()
       @screen.showCurrentFrame()
