@@ -2,6 +2,16 @@
   "name": "multiSceneMovie",
   "namespace": "multiSceneMovie",
   "version": "0.0.0",
+  "scripts": {
+    "start": "grunt server",
+    "build": "grunt build:debug",
+    "test": "grunt test:ci",
+    "postinstall": "bower install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shin1ohno/jani.git"
+  },
   "devDependencies": {
     "express": "~3.4.8",
     "lockfile": "~0.4.2",

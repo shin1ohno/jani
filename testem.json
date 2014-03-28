@@ -10,5 +10,20 @@
   "src_files": [
     "tmp/result/**/*.js"
   ],
-  "launch_in_dev": ["PhantomJS", "Chrome", "Safari"]
+  "launch_in_dev": ["PhantomJS",
+                 "Chrome",
+                 "ChromeCanary",
+                 "Firefox",
+                 "Safari",
+                 "IE7",
+                 "IE8",
+                 "IE9"],
+  "launch_in_ci": ["PhantomJS",
+                 "Chrome",
+                 "ChromeCanary",
+                 "Firefox",
+                 "Safari",
+                 "IE7",
+                 "IE8",
+                 "IE9"]
 }
