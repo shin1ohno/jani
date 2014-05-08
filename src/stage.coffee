@@ -2,15 +2,13 @@
 
 class Stage
   constructor: (@element) ->
-    @ad = new AppearanceDetector(@element)
-    @ad.didAppear = @stageDidAppear
-    @ad.didDisappear = @stageDidDisappear
+    @appearanceDetector = new AppearanceDetector(@element)
 
   stageDidAppear: ->
 
   stageDidDisapper: ->
 
-  detectAppearance: -> @ad.detect()
+  detectAppearance: -> @appearanceDetector.detect()
 
   open: -> @element.classList.remove('hide')
   close: -> @element.classList.add('hide')

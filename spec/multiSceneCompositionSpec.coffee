@@ -34,6 +34,10 @@ describe "end to end: multi scene composition", ->
   describe "after movie strips loaded", ->
     beforeEach -> @ee.emit("movie:loaded")
 
+    it "thows no error", ->
+      for eventName in ["movie:screen:disappeared"]
+        @ee.emit(eventName)
+
     it "is ready to play movie", ->
       expect(@isHidden(@loading)).toBe(true)
       expect(@isHidden(@playing)).toBe(false)
@@ -50,6 +54,14 @@ describe "end to end: multi scene composition", ->
       expect(@movie.isAtFirstFrame()).toBe(true)
       jasmine.clock().tick(10000)
       expect(@movie.isAtLastFrame()).toBe(true)
+
+    it "pauses movie when movie stage disappears", ->
+      @ee.emit("movie:screen:appeared")
+      expect(@movie.isAtFirstFrame()).toBe(true)
+      jasmine.clock().tick(5000)
+      @ee.emit("movie:screen:disappeared")
+      jasmine.clock().tick(5000)
+      expect(@movie.isAtLastFrame()).toBe(false)
 
   describe "when finished playing movie", ->
     beforeEach ->

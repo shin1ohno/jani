@@ -23,8 +23,8 @@ class MultiSceneMovie
     movie.movieDidPause = -> ee.emit("movie:paused")
     movie.movieDidResume = -> ee.emit("movie:resumed")
     movie.movieDidFinish = -> ee.emit("movie:finished")
-    movieStage.stageDidAppear = -> ee.emit("movie:screen:appeared")
-    movieStage.stageDidDisappear = -> ee.emit("movie:screen:disappeared")
+    movieStage.appearanceDetector.didAppear = -> ee.emit("movie:screen:appeared")
+    movieStage.appearanceDetector.didDisappear = -> ee.emit("movie:screen:disappeared")
 
     ee.listen("movie:loaded", movieLoadScene.finish)
     ee.listen("movie:finished", movieScene.finish)
@@ -41,7 +41,8 @@ class MultiSceneMovie
 
     movieScene.sceneDidFinish = contentScene.start
 
-    document.addEventListener("scroll", movieStage.detectAppearance, false)
+    document.addEventListener("scroll", movieStage.detectAppearance.bind(movieStage), false)
+
     movieFinishScene.stage.element.addEventListener("click", ->
       movieFinishScene.finish()
       movieScene.start()
