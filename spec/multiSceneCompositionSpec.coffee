@@ -5,8 +5,9 @@ describe "end to end: multi scene composition", ->
   beforeEach ->
     jasmine.getFixtures().fixturesPath = "fixtures"
     loadFixtures("movie.html")
-    app = new MultiSceneMovie("stages_container")
-    @scenes = app.scenes
+    #10 seconds movie @30fps loaded
+    @app = new MultiSceneMovie("stages_container")
+    @scenes = @app.scenes
     @loading = @scenes[0]
     @playing = @scenes[1]
     @finished = @scenes[2]
@@ -14,7 +15,7 @@ describe "end to end: multi scene composition", ->
     @movie = @playing.stage.movie
     jasmine.clock().install()
     spyOn(@playing.stage, "detectAppearance").and.returnValue(false)
-    app.startScenes()
+    @app.startScenes()
     @isHidden = (scene) -> scene.stage.element.classList.contains("hide")
     @ee = new EventEmitter()
 
@@ -92,6 +93,11 @@ describe "end to end: multi scene composition", ->
       @ee.listen("movie:resumed", => @spy("movie:resumed"))
       @ee.listen("movie:paused", => @spy("movie:paused"))
       @ee.listen("movie:started", => @spy("movie:started"))
+      @ee.listen("movie:played:5", => @spy("movie:played:5"))
+      @ee.listen("movie:played:10", => @spy("movie:played:10"))
+
+      @appEventSpy = jasmine.createSpy("appEventSpy")
+      @app.bindEvent("movie:played:10", @appEventSpy)
 
     it "emits", ->
       @movie.rewind()
@@ -100,10 +106,19 @@ describe "end to end: multi scene composition", ->
       @movie.pause()
       @movie.play()
       jasmine.clock().tick(5001)
+      expect(@appEventSpy).toHaveBeenCalled()
       @movie.rewind()
       @movie.play()
+      jasmine.clock().tick(5000)
       expect(@spy.calls.allArgs().map((args) -> args[0])).toEqual(
-          ["movie:started", "movie:paused", "movie:resumed", "movie:finished", "movie:started"]
+          [
+            'movie:started',
+            'movie:played:5',
+            'movie:paused',
+            'movie:resumed',
+            'movie:finished',
+            'movie:played:10',
+            'movie:started',
+            'movie:played:5',
+          ]
         )
-
-

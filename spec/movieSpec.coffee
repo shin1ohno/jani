@@ -29,3 +29,19 @@ describe "single strip movie", ->
       @movie.play()
       jasmine.clock().tick(5000);
       expect(@movie.isAtLastFrame()).toBe(true)
+
+    it "kicks movieDidPlayedTo every seconds while playing", ->
+      spyOn(@movie, "movieDidPlayedTo")
+
+      @movie.play()
+      jasmine.clock().tick(1001)
+
+      @movie.pause()
+      jasmine.clock().tick(1001)
+
+      expect(@movie.movieDidPlayedTo).toHaveBeenCalledWith(1)
+      expect(@movie.movieDidPlayedTo.calls.count()).toEqual(1)
+
+      @movie.play()
+      jasmine.clock().tick(14001)
+      expect(@movie.movieDidPlayedTo.calls.count()).toEqual(15)

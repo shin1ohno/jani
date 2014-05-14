@@ -5,6 +5,9 @@ class Movie
   constructor: (@screen, @strips, @fps) ->
     @screen.setStrips(@strips)
     @_loaded = 0
+    @currentFrameIndex = 0
+    @currentTimeCodeInSeconds = 0
+    @currentTimeCodeInSecondsWas = 0
 
   loadMovie: =>
     for strip in @strips
@@ -15,7 +18,12 @@ class Movie
 
       image.src = strip.image_uri
 
-  movieDidLoad: ->
+  moveFrameIndex: ->
+    @currentFrameIndex++
+    @currentTimeCodeInSecondsWas = @currentTimeCodeInSeconds
+    @currentTimeCodeInSeconds = Math.floor(@currentFrameIndex / @fps)
+    if @currentTimeCodeInSecondsWas != @currentTimeCodeInSeconds
+      @movieDidPlayedTo(@currentTimeCodeInSeconds)
 
   play: ->
     return if @timerId #already played
@@ -29,6 +37,7 @@ class Movie
         @movieDidFinish()
       @screen.showCurrentFrame()
       @screen.moveFrameToNext()
+      @moveFrameIndex()
     , 1000/@fps)
 
   pause: ->
@@ -36,16 +45,22 @@ class Movie
     clearInterval(@timerId) if @timerId
     @timerId = undefined
 
-  rewind: -> @screen.moveFrameToFirst()
+  rewind: ->
+    @screen.moveFrameToFirst()
+    @currentFrameIndex = 0
+    @currentTimeCodeInSeconds = 0
+    @currentTimeCodeInSecondsWas = 0
 
   isAtFirstFrame: -> @screen.isAtFirstFrame()
 
   isAtLastFrame: -> @screen.isAtLastFrame()
 
+  movieDidLoad: ->
   movieDidStart: ->
   movieDidResume: ->
   movieDidPause: ->
   movieDidFinish: ->
+  movieDidPlayedTo: (seconds) ->
 
   @createFromHTMLElement: (screenElement, stripElements) ->
     movieData = screenElement.dataset

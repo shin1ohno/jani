@@ -12,6 +12,10 @@ class MultiSceneMovie
   startScenes: ->
     @scenes[0].start()
 
+  bindEvent: (eventName, callback) ->
+    ee = new EventEmitter()
+    ee.listen(eventName, callback)
+
   composeScenes = (movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
     ee = new EventEmitter()
 
@@ -23,6 +27,7 @@ class MultiSceneMovie
     movie.movieDidPause = -> ee.emit("movie:paused")
     movie.movieDidResume = -> ee.emit("movie:resumed")
     movie.movieDidFinish = -> ee.emit("movie:finished")
+    movie.movieDidPlayedTo = (seconds) -> ee.emit("movie:played:#{seconds}")
     movieStage.appearanceDetector.didAppear = -> ee.emit("movie:screen:appeared")
     movieStage.appearanceDetector.didDisappear = -> ee.emit("movie:screen:disappeared")
 
