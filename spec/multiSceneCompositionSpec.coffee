@@ -83,7 +83,7 @@ describe "end to end: multi scene composition", ->
         expect(@isHidden(@loading)).toBe(true)
         expect(@isHidden(@playing)).toBe(false)
         expect(@isHidden(@finished)).toBe(true)
-        expect(@isHidden(@content)).toBe(false)
+        expect(@isHidden(@content)).toBe(true)
 
   describe "event emittions", ->
     beforeEach ->
@@ -100,8 +100,10 @@ describe "end to end: multi scene composition", ->
       @movie.pause()
       @movie.play()
       jasmine.clock().tick(5001)
+      @movie.rewind()
+      @movie.play()
       expect(@spy.calls.allArgs().map((args) -> args[0])).toEqual(
-          ["movie:started", "movie:paused", "movie:resumed", "movie:finished"]
+          ["movie:started", "movie:paused", "movie:resumed", "movie:finished", "movie:started"]
         )
 
 

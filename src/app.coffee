@@ -44,6 +44,7 @@ class MultiSceneMovie
     document.addEventListener("scroll", movieStage.detectAppearance.bind(movieStage), false)
 
     movieFinishScene.stage.element.addEventListener("click", ->
+      contentScene.stage.close()
       movieFinishScene.finish()
       movieScene.start()
     , false)
