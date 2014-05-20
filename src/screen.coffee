@@ -17,7 +17,8 @@ class Screen
       url
 
   showCurrentFrame: ->
-    @fitCssToCurrentFrame() unless @element.style.backgroundImage
+    if "url(#{@currentStrip().image_uri})" != @element.style.backgroundImage
+      @fitCssToCurrentStrip()
     @element.style.backgroundPosition = @currentStrip().currentFrame().backgroundPositionText()
 
   currentStrip: -> @strips[@currentStipIndex]
@@ -29,16 +30,15 @@ class Screen
   moveStripToNext: ->
     @currentStrip().frameIndex = 0
     @currentStipIndex++ unless @currentStrip() == @strips[@strips.length - 1]
-    @fitCssToCurrentFrame()
 
-  fitCssToCurrentFrame: ->
+  fitCssToCurrentStrip: ->
     defaultStyle = @element.style.cssText
     @element.style.cssText = defaultStyle + "background-image: url(#{@currentStrip().image_uri}); background-size: cover;　background-repeat: no-repeat;"
 
   moveFrameToFirst: ->
     @currentStipIndex = 0
     @currentStrip().frameIndex = 0
-    @fitCssToCurrentFrame()
+    @fitCssToCurrentStrip()
 
   isAtFirstFrame: ->
     return false unless @currentStrip() == @strips[0]
