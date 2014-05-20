@@ -12,8 +12,4 @@ class Strip
 
   isAtLastFrame: -> @frameIndex == @framesCount - 1
 
-  toCssText: ->
-    stripStyle = "background-image: url(#{@image_uri}); background-size: cover;　background-repeat: no-repeat;"
-    stripStyle + @currentFrame().toCssText()
-
 `export default Strip`
