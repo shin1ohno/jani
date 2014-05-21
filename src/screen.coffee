@@ -1,8 +1,12 @@
 class Screen
   constructor: (@element) ->
+    @element.style.position = "relative"
+    @element.style.overflow = "hidden"
     @setDefaultImage()
 
-  setStrips: (@strips) -> @currentStipIndex = 0
+  setStrips: (@strips) ->
+    @currentStipIndex = 0
+    @currentStrip().activate()
 
   setDefaultImage: ->
     if @defaultImageUrl()
@@ -16,10 +20,7 @@ class Screen
     else
       url
 
-  showCurrentFrame: ->
-    if "url(#{@currentStrip().image_uri})" != @element.style.backgroundImage
-      @fitCssToCurrentStrip()
-    @element.style.backgroundPosition = @currentStrip().currentFrame().backgroundPositionText()
+  showCurrentFrame: -> @currentStrip().moveToCurrentFrame()
 
   currentStrip: -> @strips[@currentStipIndex]
 
@@ -28,17 +29,16 @@ class Screen
     @currentStrip().moveFrameToNext()
 
   moveStripToNext: ->
-    @currentStrip().frameIndex = 0
+    @currentStrip().resetFrame()
+    @currentStrip().deactivate()
     @currentStipIndex++ unless @currentStrip() == @strips[@strips.length - 1]
-
-  fitCssToCurrentStrip: ->
-    defaultStyle = @element.style.cssText
-    @element.style.cssText = defaultStyle + "background-image: url(#{@currentStrip().image_uri}); background-size: cover;　background-repeat: no-repeat;"
+    @currentStrip().resetFrame()
+    @currentStrip().activate()
 
   moveFrameToFirst: ->
     @currentStipIndex = 0
     @currentStrip().frameIndex = 0
-    @fitCssToCurrentStrip()
+    @currentStrip().moveToCurrentFrame()
 
   isAtFirstFrame: ->
     return false unless @currentStrip() == @strips[0]

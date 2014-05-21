@@ -8,15 +8,14 @@ class Movie
     @currentFrameIndex = 0
     @currentTimeCodeInSeconds = 0
     @currentTimeCodeInSecondsWas = 0
-
-  loadMovie: =>
-    for strip in @strips
-      image = new Image()
-      image.onload = =>
+    @strips.forEach (strip) =>
+      strip.stripImageDidLoad = =>
         @_loaded += 1
         @movieDidLoad() if @_loaded == @strips.length
 
-      image.src = strip.image_uri
+  loadMovie: =>
+    @strips.forEach (strip) ->
+      strip.loadStripImage()
 
   moveFrameIndex: ->
     @currentFrameIndex++
@@ -34,6 +33,9 @@ class Movie
     @timerId = setInterval(=>
       if @isAtLastFrame()
         @pause()
+        @screen.currentStrip().deactivate()
+        @screen.currentStipIndex = 0
+        @screen.currentStrip().activate()
         @movieDidFinish()
       @screen.showCurrentFrame()
       @screen.moveFrameToNext()
@@ -64,9 +66,17 @@ class Movie
 
   @createFromHTMLElement: (screenElement, stripElements) ->
     movieData = screenElement.dataset
+
+    width = parseInt(movieData.frameWidth, 10)
+    height = parseInt(movieData.frameHeight, 10)
+
     screen = new Screen(screenElement)
+    screen.element.style.width = width
+    screen.element.style.height = height
+
     strips = []
-    strips.push(new Strip(strip.dataset.url, parseInt(movieData.frameWidth, 10), parseInt(movieData.frameHeight, 10), parseInt(strip.dataset.framesCount, 10))) for strip in stripElements
+    strips.push(new Strip(strip.dataset.url, width, height, parseInt(strip.dataset.framesCount, 10), strip)) for strip in stripElements
+
     new Movie(screen, strips, parseInt(movieData.fps, 10))
 
 `export default Movie`
