@@ -50,10 +50,14 @@ class MultiSceneMovie
     # Function.prototype.bind is not supported by phantomjs but no scroll in phantomjs so just ignore
 
     movieFinishScene.stage.element.addEventListener("click", ->
+      ee.emit("movie:replayed")
+    ,false)
+
+    ee.listen("movie:replayed", ->
       contentScene.stage.close()
       movieFinishScene.finish()
       movieScene.start()
-    , false)
+    )
 
   createAndComposeScenes: ->
     rootElement = document.getElementById(@rootElementId)
