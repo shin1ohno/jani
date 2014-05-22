@@ -46,7 +46,8 @@ class MultiSceneMovie
 
     movieScene.sceneDidFinish = contentScene.start
 
-    document.addEventListener("scroll", movieStage.detectAppearance.bind(movieStage), false)
+    document.addEventListener("scroll", movieStage.detectAppearance.bind?(movieStage), false)
+    # Function.prototype.bind is not supported by phantomjs but no scroll in phantomjs so just ignore
 
     movieFinishScene.stage.element.addEventListener("click", ->
       contentScene.stage.close()
