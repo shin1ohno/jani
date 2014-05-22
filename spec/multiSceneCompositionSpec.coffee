@@ -77,8 +77,7 @@ describe "end to end: multi scene composition", ->
       expect(@isHidden(@content)).toBe(false)
 
     describe "when replay UI clicked", ->
-      beforeEach ->
-        $('.movie_control.finished').click()
+      beforeEach -> @ee.emit("movie:replayed")
 
       it "rewind and replay movie", ->
         expect(@isHidden(@loading)).toBe(true)
