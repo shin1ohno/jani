@@ -7,9 +7,21 @@ class EventEmitter
 
   emit: (type, obj) ->
     if typeof(obj) == "object"
-      @element.dispatchEvent(new CustomEvent(type, obj))
+      if typeof(CustomEvent) == "function"
+        @element.dispatchEvent(new CustomEvent(type, obj))
+      else
+        #Some old browser and phantomjs don't implement CustomEvent
+        newEvent = document.createEvent('CustomEvent')
+        newEvent.initCustomEvent(type, false, false, obj.detail)
+        @element.dispatchEvent(newEvent)
     else
-      @element.dispatchEvent(new Event(type))
+      try
+        @element.dispatchEvent(new Event(type))
+      catch e
+        #Android browser and phantomjs can't handle new Event(type) right
+        newEvent = document.createEvent("CustomEvent")
+        newEvent.initEvent(type, false, false)
+        @element.dispatchEvent(newEvent)
 
   listen: (type, callback) ->
     @element.addEventListener(type, callback, false)
