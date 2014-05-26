@@ -1,9 +1,10 @@
 .hide {
   display: none;
   height: 0 !important;
+  opacity: 0;
 }
 
 #movie {
-  height:180px;
-  width:320px;
+  width: 320px;
+  height: 180px;
 }

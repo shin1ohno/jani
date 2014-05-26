@@ -1,5 +1,5 @@
 class AppearanceDetector
-  constructor: (@element) ->
+  constructor: (@element, @topMargin=90, @bottomMargin=90) ->
     @wasVisible = false
     @detect()
 
@@ -10,10 +10,10 @@ class AppearanceDetector
   elementBottom: -> @elementTop() + @element.getBoundingClientRect().height
 
   topVisible: ->
-    @elementTop() > 0 && @elementTop() < @viewportBottom()
+    @elementTop() + @topMargin > 0 && @elementTop() + @topMargin < @viewportBottom()
 
   bottomVisible: ->
-    @elementBottom() > 0 && @elementBottom() < @viewportBottom()
+    @elementBottom() - @bottomMargin > 0 && @elementBottom() - @bottomMargin < @viewportBottom()
 
   visible: ->
     @topVisible() && @bottomVisible()
