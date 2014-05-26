@@ -15,7 +15,7 @@
 
   <script src="/assets/5ee5a729.vendor.min.js"></script>
 
-  <script src="/assets/e9548c55.app.min.js"></script>
+  <script src="/assets/ac7745cb.app.min.js"></script>
 
 </head>
 <body>
@@ -91,8 +91,9 @@
 
   </div>
   <script>
-    var MultiSceneMovie = require("multiSceneMovie/app")["default"];
-    (new MultiSceneMovie("stages_container")).startScenes()
+    var MultiSceneMovie = require("multiSceneMovie/multiSceneMovie")["default"];
+    window.app = new MultiSceneMovie("stages_container");
+    app.startScenes();
   </script>
 </body>
 </html>

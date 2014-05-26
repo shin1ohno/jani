@@ -124,7 +124,7 @@
             <div
               data-url="http://localhost:8000/assets/time_code.png"
               class="strip hide"
-              data-frames-count=300
+              data-frames-count=303
             >
               <img>
             </div>
@@ -164,8 +164,9 @@
 
   <!-- @if tests=false -->
   <script>
-    var MultiSceneMovie = require("multiSceneMovie/app")["default"];
-    (new MultiSceneMovie("stages_container")).startScenes()
+    var MultiSceneMovie = require("multiSceneMovie/multiSceneMovie")["default"];
+    window.app = new MultiSceneMovie("stages_container");
+    app.startScenes();
   </script>
   <!-- @endif -->
 </body>

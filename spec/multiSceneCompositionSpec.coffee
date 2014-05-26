@@ -1,5 +1,5 @@
 `import EventEmitter from "multiSceneMovie/eventEmitter"`
-`import MultiSceneMovie from "multiSceneMovie/app"`
+`import MultiSceneMovie from "multiSceneMovie/multiSceneMovie"`
 
 describe "end to end: multi scene composition", ->
   beforeEach ->
@@ -77,7 +77,7 @@ describe "end to end: multi scene composition", ->
       expect(@isHidden(@content)).toBe(false)
 
     describe "when replay UI clicked", ->
-      beforeEach -> @ee.emit("movie:replayed")
+      beforeEach -> @ee.emit("movie:replay")
 
       it "rewind and replay movie", ->
         expect(@isHidden(@loading)).toBe(true)
@@ -86,38 +86,48 @@ describe "end to end: multi scene composition", ->
         expect(@isHidden(@content)).toBe(true)
 
   describe "event emittions", ->
-    beforeEach ->
-      @spy = jasmine.createSpy("eventSpy")
-      @ee.listen("movie:finished", => @spy("movie:finished"))
-      @ee.listen("movie:resumed", => @spy("movie:resumed"))
-      @ee.listen("movie:paused", => @spy("movie:paused"))
-      @ee.listen("movie:started", => @spy("movie:started"))
-      @ee.listen("movie:played:5", => @spy("movie:played:5"))
-      @ee.listen("movie:played:10", => @spy("movie:played:10"))
+    describe "event binding with callbacks", ->
+      beforeEach ->
+        @spy = jasmine.createSpy("eventSpy")
+        @ee.listen("movie:finished", => @spy("movie:finished"))
+        @ee.listen("movie:resumed", => @spy("movie:resumed"))
+        @ee.listen("movie:paused", => @spy("movie:paused"))
+        @ee.listen("movie:started", => @spy("movie:started"))
+        @ee.listen("movie:played:5", => @spy("movie:played:5"))
+        @ee.listen("movie:played:10", => @spy("movie:played:10"))
 
-      @appEventSpy = jasmine.createSpy("appEventSpy")
-      @app.bindEvent("movie:played:10", @appEventSpy)
+        @appEventSpy = jasmine.createSpy("appEventSpy")
+        @app.bindEvent("movie:played:10", @appEventSpy)
 
-    it "emits", ->
-      @movie.rewind()
-      @movie.play()
-      jasmine.clock().tick(5000)
-      @movie.pause()
-      @movie.play()
-      jasmine.clock().tick(5001)
-      expect(@appEventSpy).toHaveBeenCalled()
-      @movie.rewind()
-      @movie.play()
-      jasmine.clock().tick(5000)
-      expect(@spy.calls.allArgs().map((args) -> args[0])).toEqual(
-          [
-            'movie:started',
-            'movie:played:5',
-            'movie:paused',
-            'movie:resumed',
-            'movie:finished',
-            'movie:played:10',
-            'movie:started',
-            'movie:played:5',
-          ]
-        )
+      it "emits", ->
+        @movie.rewind()
+        @movie.play()
+        jasmine.clock().tick(5000)
+        @movie.pause()
+        @movie.play()
+        jasmine.clock().tick(5001)
+        expect(@appEventSpy).toHaveBeenCalled()
+        @movie.rewind()
+        @movie.play()
+        jasmine.clock().tick(5000)
+        expect(@spy.calls.allArgs().map((args) -> args[0])).toEqual(
+            [
+              'movie:started',
+              'movie:played:5',
+              'movie:paused',
+              'movie:resumed',
+              'movie:finished',
+              'movie:played:10',
+              'movie:started',
+              'movie:played:5',
+            ]
+          )
+
+    describe "event triggering", ->
+      beforeEach ->
+        @appTriggerSpy = jasmine.createSpy("appTriggerSpy")
+
+      it "emits", ->
+        @app.bindEvent("movie:pause", @appTriggerSpy)
+        @app.triggerEvent("movie:pause")
+        expect(@appTriggerSpy).toHaveBeenCalled()

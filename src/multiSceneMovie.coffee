@@ -16,6 +16,10 @@ class MultiSceneMovie
     ee = new EventEmitter()
     ee.listen(eventName, callback)
 
+  triggerEvent: (eventName) ->
+    ee = new EventEmitter()
+    ee.emit(eventName)
+
   composeScenes = (movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
     ee = new EventEmitter()
 
@@ -36,13 +40,16 @@ class MultiSceneMovie
     ee.listen("movie:finished", movieFinishScene.start)
     ee.listen("movie:screen:appeared", -> movie.play() if movieStage.isOpen())
     ee.listen("movie:screen:disappeared", -> movie.pause())
+    ee.listen("movie:play", -> movie.play() if movieStage.isOpen())
+    ee.listen("movie:pause", -> movie.pause())
+    ee.listen("movie:resume", -> movie.play() if movieStage.isOpen())
 
     movieLoadScene.sceneDidStart = movie.loadMovie
     movieLoadScene.sceneDidFinish = movieScene.start
 
     movieScene.sceneDidStart = ->
       movie.rewind()
-      movie.play() if movieStage.detectAppearance()
+      movie.play() if movieStage.detectAppearance().bind?(movieStage)
 
     movieScene.sceneDidFinish = contentScene.start
 
@@ -50,26 +57,30 @@ class MultiSceneMovie
     # Function.prototype.bind is not supported by phantomjs but no scroll in phantomjs so just ignore
 
     movieFinishScene.stage.element.addEventListener("click", ->
-      ee.emit("movie:replayed")
+      ee.emit("movie:replay")
     ,false)
 
-    ee.listen("movie:replayed", ->
+    ee.listen("movie:replay", ->
       contentScene.stage.close()
       movieFinishScene.finish()
       movieScene.start()
+      ee.emit("movie:replayed")
     )
 
   createAndComposeScenes: ->
     rootElement = document.getElementById(@rootElementId)
     return unless rootElement
-    new EventEmitter(rootElement)
+
+    new EventEmitter(rootElement) # Create singleton instance
 
     stagesDataset = rootElement.dataset
+    return unless stagesDataset
+
     movieLoadElement = document.getElementById(stagesDataset["loadingStage"])
     movieFinishElement = document.getElementById(stagesDataset["finishedStage"])
     contentElement = document.getElementById(stagesDataset["contentStage"])
 
-    movieDataset = document.getElementById(rootElement.dataset["movieStage"]).dataset
+    movieDataset = document.getElementById(stagesDataset["movieStage"]).dataset
     screenElement = document.getElementById(movieDataset["screen"])
     stripElements = document.getElementById(movieDataset["strips"]).getElementsByClassName(movieDataset["stripsClass"])
     movie = Movie.createFromHTMLElement(screenElement, stripElements)
