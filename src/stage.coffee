@@ -10,7 +10,10 @@ class Stage
 
   detectAppearance: -> @appearanceDetector.detect()
 
-  open: -> @element.classList.remove('hide')
+  open: ->
+    @detectAppearance()
+    @element.classList.remove('hide')
+
   close: -> @element.classList.add('hide')
 
   isOpen: -> !@isClose()
