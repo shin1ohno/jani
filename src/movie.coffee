@@ -80,4 +80,3 @@ class Movie
     new Movie(screen, strips, parseInt(movieData.fps, 10))
 
 `export default Movie`
-

@@ -5,25 +5,24 @@
     data-content-stage = "content_scene"
     data-movie-stage = "playing_scene"
   >
-  <div class="movie_control loading" id="loading_scene">
+  <div class="movie_control loading loading_scene">
     <p>play movie</p>
   </div>
 
-  <div class="movie_control finished hide" id="finished_scene">
+  <div class="movie_control finished hide finished_scene">
     <p>replay movie</p>
   </div>
 
-  <div id="playing_scene" data-screen="movie" data-strips="movie_strips" data-strips-class="strip">
+  <div class="playing_scene" data-screen="movie" data-strips-container="movie_strips" data-strips="strip">
     <div
-        id="movie"
-        class="hide"
+        class="hide movie"
         data-frame-width=320
         data-frame-height=180
         data-fps=30
         data-default-image="http://placehold.it/320x180"
       >
     </div>
-    <div id="movie_strips" class="hide">
+    <div class="movie_strips hide">
       <div
         data-url="/assets/strip.png"
         class="strip"
@@ -34,7 +33,7 @@
     </div>
   </div>
 
-  <div id="content_scene" class="hide">
+  <div class="content_scene hide">
     <img src="http://placehold.it/320x180">
   </div>
 </div>

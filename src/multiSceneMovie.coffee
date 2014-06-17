@@ -76,13 +76,16 @@ class MultiSceneMovie
     stagesDataset = rootElement.dataset
     return unless stagesDataset
 
-    movieLoadElement = document.getElementById(stagesDataset["loadingStage"])
-    movieFinishElement = document.getElementById(stagesDataset["finishedStage"])
-    contentElement = document.getElementById(stagesDataset["contentStage"])
+    movieLoadElement = rootElement.getElementsByClassName(stagesDataset["loadingStage"])[0]
+    movieFinishElement = rootElement.getElementsByClassName(stagesDataset["finishedStage"])[0]
+    contentElement = rootElement.getElementsByClassName(stagesDataset["contentStage"])[0]
 
-    movieDataset = document.getElementById(stagesDataset["movieStage"]).dataset
-    screenElement = document.getElementById(movieDataset["screen"])
-    stripElements = document.getElementById(movieDataset["strips"]).getElementsByClassName(movieDataset["stripsClass"])
+    movieDataset = rootElement.getElementsByClassName(stagesDataset["movieStage"])[0].dataset
+    screenElement = rootElement.getElementsByClassName(movieDataset["screen"])[0]
+    stripElements = rootElement.getElementsByClassName(movieDataset["stripsContainer"])[0].getElementsByClassName(movieDataset["strips"])
+
+    return unless screenElement
+
     movie = Movie.createFromHTMLElement(screenElement, stripElements)
 
     createScene = (sceneElement) -> new Scene(new Stage(sceneElement))
