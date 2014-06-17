@@ -11,7 +11,7 @@ class Movie
     @strips.forEach (strip) =>
       strip.stripImageDidLoad = =>
         @_loaded += 1
-        @movieDidLoad() if @_loaded == @strips.length
+        @movieDidLoad() if @_loaded == Math.ceil(@strips.length/3)
 
   loadMovie: =>
     @strips.forEach (strip) ->
