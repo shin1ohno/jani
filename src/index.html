@@ -150,6 +150,64 @@
       </div>
     </div>
 
+    <div
+        id="another_stages_container"
+        data-loading-stage = "loading_scene"
+        data-finished-stage = "finished_scene"
+        data-content-stage = "content_scene"
+        data-movie-stage = "playing_scene"
+      >
+      <div class="movie_control loading hide loading_scene">
+        <p>play movie</p>
+      </div>
+
+      <div class="movie_control finished hide finished_scene">
+        <p>replay movie</p>
+      </div>
+
+      <div
+        class="playing_scene"
+        data-screen="movie"
+        data-strips-container="movie_strips"
+        data-strips="strip"
+        data-default-image="http://placehold.it/320x180"
+        >
+        <div
+            class="movie hide"
+            data-frame-width=320
+            data-frame-height=180
+            data-fps=30
+          >
+          <div class="movie_strips">
+            <div
+              data-url="http://localhost:8000/assets/paper.png"
+              class="strip hide"
+              data-frames-count=121
+            >
+              <img>
+            </div>
+            <div
+              data-url="http://localhost:8000/assets/float.png"
+              class="strip hide"
+              data-frames-count=120
+            >
+              <img>
+            </div>
+            <div
+              data-url="http://localhost:8000/assets/time_code.png"
+              class="strip hide"
+              data-frames-count=303
+            >
+              <img>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content_scene hide">
+        <img src="http://placehold.it/320x180">
+      </div>
+    </div>
+
   </div>
   <!-- @endif -->
 
@@ -165,6 +223,12 @@
     var MultiSceneMovie = require("multiSceneMovie/multiSceneMovie")["default"];
     window.app = new MultiSceneMovie("stages_container");
     app.startScenes();
+
+    anotherApp = new MultiSceneMovie("another_stages_container");
+
+    app.bindEvent("movie:loaded", function(){
+      anotherApp.startScenes();
+    });
   </script>
   <!-- @endif -->
 </body>
