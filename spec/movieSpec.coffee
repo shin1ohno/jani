@@ -7,7 +7,7 @@ describe "single strip movie", ->
 
   describe "createFromHTMLElement", ->
     beforeEach ->
-      @movie = Movie.createFromHTMLElement($("#movie")[0], $("#movie_strips .strip"))
+      @movie = Movie.createFromHTMLElement($(".movie")[0], $(".movie_strips .strip"))
       jasmine.clock().install()
 
     afterEach ->
