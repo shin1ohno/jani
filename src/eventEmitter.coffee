@@ -1,9 +1,13 @@
 class EventEmitter
   constructor: (element) ->
-    return EventEmitter.instance if typeof(EventEmitter.instance) == "object"
+    EventEmitter.instances = [] unless EventEmitter.instances
     throw "please set root element for event emitting" unless element
+
+    singleton = EventEmitter.instances.filter((instance) -> instance.element == element)[0]
+    return singleton if singleton
+
     @element = element
-    EventEmitter.instance = @
+    EventEmitter.instances.push(this)
 
   emit: (type, obj) ->
     if typeof(obj) == "object"

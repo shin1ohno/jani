@@ -17,7 +17,7 @@ describe "end to end: multi scene composition", ->
     spyOn(@playing.stage, "detectAppearance").and.returnValue(false)
     @app.startScenes()
     @isHidden = (scene) -> scene.stage.element.classList.contains("hide")
-    @ee = new EventEmitter()
+    @ee = new EventEmitter($("#stages_container")[0])
 
   afterEach ->
     jasmine.clock().uninstall()

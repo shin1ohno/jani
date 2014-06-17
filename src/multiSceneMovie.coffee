@@ -12,16 +12,14 @@ class MultiSceneMovie
   startScenes: ->
     @scenes[0].start()
 
-  bindEvent: (eventName, callback) ->
-    ee = new EventEmitter()
-    ee.listen(eventName, callback)
+  bindEvent: (eventName, callback) -> @getEventEmitter().listen(eventName, callback)
 
-  triggerEvent: (eventName) ->
-    ee = new EventEmitter()
-    ee.emit(eventName)
+  triggerEvent: (eventName) -> @getEventEmitter().emit(eventName)
 
-  composeScenes = (movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
-    ee = new EventEmitter()
+  getEventEmitter: -> new EventEmitter(document.getElementById(@rootElementId)) #get singleton instance
+
+  composeScenes = (rootElement, movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
+    ee = new EventEmitter(rootElement)
 
     movieStage = movieScene.stage
     movieStage.movie = movie # just for spec
@@ -94,7 +92,7 @@ class MultiSceneMovie
     movieFinishScene = createScene(movieFinishElement)
     contentScene = createScene(contentElement)
 
-    composeScenes(movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
+    composeScenes(rootElement, movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
     @scenes = [movieLoadScene, movieScene, movieFinishScene, contentScene]
 
 `export default MultiSceneMovie`
