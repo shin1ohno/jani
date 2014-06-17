@@ -36,5 +36,5 @@ describe "event emitting and listening", ->
     callback = (e) -> spy(e.detail)
     ee.listen("movie:paused", callback)
     obj = { movie: "movie" }
-    ee.emit("movie:paused", {detail: obj})
+    ee.emit("movie:paused", obj)
     expect(spy).toHaveBeenCalledWith(obj)

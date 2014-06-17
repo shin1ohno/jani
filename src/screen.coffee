@@ -5,7 +5,7 @@ class Screen
     @setDefaultImage()
 
   setStrips: (@strips) ->
-    @currentStipIndex = 0
+    @currentStripIndex = 0
     @currentStrip().activate()
 
   setDefaultImage: ->
@@ -22,7 +22,7 @@ class Screen
 
   showCurrentFrame: -> @currentStrip().moveToCurrentFrame()
 
-  currentStrip: -> @strips[@currentStipIndex]
+  currentStrip: -> @strips[@currentStripIndex]
 
   moveFrameToNext: ->
     @moveStripToNext() if @currentStrip().isAtLastFrame()
@@ -31,12 +31,12 @@ class Screen
   moveStripToNext: ->
     @currentStrip().resetFrame()
     @currentStrip().deactivate()
-    @currentStipIndex++ unless @currentStrip() == @strips[@strips.length - 1]
+    @currentStripIndex++ unless @currentStrip() == @strips[@strips.length - 1]
     @currentStrip().resetFrame()
     @currentStrip().activate()
 
   moveFrameToFirst: ->
-    @currentStipIndex = 0
+    @currentStripIndex = 0
     @currentStrip().frameIndex = 0
     @currentStrip().moveToCurrentFrame()
 

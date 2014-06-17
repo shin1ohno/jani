@@ -7,7 +7,7 @@
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="/assets/060f5e29.app.min.css">
+  <link rel="stylesheet" href="/assets/df418ed2.app.min.css">
 
   <!-- for more details visit: https://github.com/yeoman/grunt-usemin -->
 
@@ -15,7 +15,7 @@
 
   <script src="/assets/5ee5a729.vendor.min.js"></script>
 
-  <script src="/assets/5dc73319.app.min.js"></script>
+  <script src="/assets/8a04f0f9.app.min.js"></script>
 
 </head>
 <body>
@@ -117,9 +117,9 @@
           >
           <div class="movie_strips">
             <div
-              data-url="http://localhost:8000/assets/paper.png"
+              data-url="http://localhost:8000/assets/time_code.png"
               class="strip hide"
-              data-frames-count=121
+              data-frames-count=303
             >
               <img>
             </div>
@@ -131,9 +131,9 @@
               <img>
             </div>
             <div
-              data-url="http://localhost:8000/assets/time_code.png"
+              data-url="http://localhost:8000/assets/paper.png"
               class="strip hide"
-              data-frames-count=303
+              data-frames-count=121
             >
               <img>
             </div>
@@ -151,10 +151,14 @@
     window.app = new MultiSceneMovie("stages_container");
     app.startScenes();
 
-    anotherApp = new MultiSceneMovie("another_stages_container");
+    window.anotherApp = new MultiSceneMovie("another_stages_container");
 
     app.bindEvent("movie:loaded", function(){
       anotherApp.startScenes();
+    });
+
+    app.bindEvent("movie:paused", function(callbackData) {
+      anotherApp.movie.moveToFrameIndex(callbackData.detail.index)
     });
   </script>
 </body>
