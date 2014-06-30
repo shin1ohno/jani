@@ -130,20 +130,20 @@ describe "end to end: multi scene composition", ->
         @app.triggerEvent("movie:pause")
         expect(@appTriggerSpy).toHaveBeenCalled()
 
-  describe "Movie", ->
-    it "moves frame to given index", ->
+  describe "composed Movie", ->
+    it "can move frame to given index", ->
       n = Math.floor(Math.random() * 100)
       @movie.moveToFrameIndex(n)
       expect(@movie.currentFrameIndex).toEqual(n)
 
-    describe "callback", ->
+    describe "has callback when movie pauses that", ->
       beforeEach ->
         @indexSpy = jasmine.createSpy("indexSpy")
         @app.bindEvent("movie:paused", (data) => @indexSpy(data.detail.index))
         @app.triggerEvent("movie:loaded")
         @app.triggerEvent("movie:screen:appeared")
 
-      it "passes Event object to callback", ->
+      it "passes frame index to callback", ->
         @app.triggerEvent("movie:play")
         jasmine.clock().tick(1001) # 1 sec. +
         @app.triggerEvent("movie:pause")
