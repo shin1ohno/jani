@@ -11,12 +11,12 @@ class EventEmitter
 
   emit: (type, obj) ->
     if typeof(obj) == "object"
-      if typeof(CustomEvent) == "function"
-        @element.dispatchEvent(new CustomEvent(type, obj))
+      if typeof(CustomEvent) == "object"
+        @element.dispatchEvent(new CustomEvent(type, {"detail": obj}))
       else
         #Some old browser and phantomjs don't implement CustomEvent
         newEvent = document.createEvent('CustomEvent')
-        newEvent.initCustomEvent(type, false, false, obj.detail)
+        newEvent.initCustomEvent(type, false, false, obj)
         @element.dispatchEvent(newEvent)
     else
       try

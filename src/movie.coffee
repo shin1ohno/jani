@@ -34,7 +34,7 @@ class Movie
       if @isAtLastFrame()
         @pause()
         @screen.currentStrip().deactivate()
-        @screen.currentStipIndex = 0
+        @screen.currentStripIndex = 0
         @screen.currentStrip().activate()
         @movieDidFinish()
       @screen.showCurrentFrame()
@@ -52,6 +52,23 @@ class Movie
     @currentFrameIndex = 0
     @currentTimeCodeInSeconds = 0
     @currentTimeCodeInSecondsWas = 0
+
+  moveToFrameIndex: (frameIndex) ->
+    @pause()
+    @screen.currentStrip().resetFrame()
+    @screen.currentStrip().deactivate()
+    fi = frameIndex
+    si = 0
+    while(fi > @strips[si].framesCount)
+      fi -= @strips[si].framesCount
+      si++
+
+    @screen.currentStripIndex = si
+    @screen.currentStrip().resetFrame()
+    @screen.currentStrip().frameIndex = fi
+    @screen.currentStrip().activate()
+    @screen.showCurrentFrame()
+    @currentFrameIndex = frameIndex
 
   isAtFirstFrame: -> @screen.isAtFirstFrame()
 

@@ -1,4 +1,3 @@
-`import EventEmitter from "multiSceneMovie/eventEmitter"`
 `import MultiSceneMovie from "multiSceneMovie/multiSceneMovie"`
 
 describe "end to end: multi scene composition", ->
@@ -17,7 +16,6 @@ describe "end to end: multi scene composition", ->
     spyOn(@playing.stage, "detectAppearance").and.returnValue(false)
     @app.startScenes()
     @isHidden = (scene) -> scene.stage.element.classList.contains("hide")
-    @ee = new EventEmitter($("#stages_container")[0])
 
   afterEach ->
     jasmine.clock().uninstall()
@@ -33,11 +31,11 @@ describe "end to end: multi scene composition", ->
     expect(@isHidden(@content)).toBe(true)
 
   describe "after movie strips loaded", ->
-    beforeEach -> @ee.emit("movie:loaded")
+    beforeEach -> @app.triggerEvent("movie:loaded")
 
     it "thows no error", ->
       for eventName in ["movie:screen:disappeared"]
-        @ee.emit(eventName)
+        @app.triggerEvent(eventName)
 
     it "is ready to play movie", ->
       expect(@isHidden(@loading)).toBe(true)
@@ -51,23 +49,23 @@ describe "end to end: multi scene composition", ->
       expect(@movie.isAtFirstFrame()).toBe(true)
 
     it "plays movie to last after movie stage appears", ->
-      @ee.emit("movie:screen:appeared")
+      @app.triggerEvent("movie:screen:appeared")
       expect(@movie.isAtFirstFrame()).toBe(true)
       jasmine.clock().tick(10000)
       expect(@movie.isAtLastFrame()).toBe(true)
 
     it "pauses movie when movie stage disappears", ->
-      @ee.emit("movie:screen:appeared")
+      @app.triggerEvent("movie:screen:appeared")
       expect(@movie.isAtFirstFrame()).toBe(true)
       jasmine.clock().tick(5000)
-      @ee.emit("movie:screen:disappeared")
+      @app.triggerEvent("movie:screen:disappeared")
       jasmine.clock().tick(5000)
       expect(@movie.isAtLastFrame()).toBe(false)
 
   describe "when finished playing movie", ->
     beforeEach ->
-      @ee.emit("movie:loaded")
-      @ee.emit("movie:screen:appeared")
+      @app.triggerEvent("movie:loaded")
+      @app.triggerEvent("movie:screen:appeared")
       jasmine.clock().tick(10001)
 
     it "shows replay UI and content", ->
@@ -77,7 +75,7 @@ describe "end to end: multi scene composition", ->
       expect(@isHidden(@content)).toBe(false)
 
     describe "when replay UI clicked", ->
-      beforeEach -> @ee.emit("movie:replay")
+      beforeEach -> @app.triggerEvent("movie:replay")
 
       it "rewind and replay movie", ->
         expect(@isHidden(@loading)).toBe(true)
@@ -89,12 +87,12 @@ describe "end to end: multi scene composition", ->
     describe "event binding with callbacks", ->
       beforeEach ->
         @spy = jasmine.createSpy("eventSpy")
-        @ee.listen("movie:finished", => @spy("movie:finished"))
-        @ee.listen("movie:resumed", => @spy("movie:resumed"))
-        @ee.listen("movie:paused", => @spy("movie:paused"))
-        @ee.listen("movie:started", => @spy("movie:started"))
-        @ee.listen("movie:played:5", => @spy("movie:played:5"))
-        @ee.listen("movie:played:10", => @spy("movie:played:10"))
+        @app.bindEvent("movie:finished", => @spy("movie:finished"))
+        @app.bindEvent("movie:resumed", => @spy("movie:resumed"))
+        @app.bindEvent("movie:paused", => @spy("movie:paused"))
+        @app.bindEvent("movie:started", => @spy("movie:started"))
+        @app.bindEvent("movie:played:5", => @spy("movie:played:5"))
+        @app.bindEvent("movie:played:10", => @spy("movie:played:10"))
 
         @appEventSpy = jasmine.createSpy("appEventSpy")
         @app.bindEvent("movie:played:10", @appEventSpy)
@@ -131,3 +129,22 @@ describe "end to end: multi scene composition", ->
         @app.bindEvent("movie:pause", @appTriggerSpy)
         @app.triggerEvent("movie:pause")
         expect(@appTriggerSpy).toHaveBeenCalled()
+
+  describe "Movie", ->
+    it "moves frame to given index", ->
+      n = Math.floor(Math.random() * 100)
+      @movie.moveToFrameIndex(n)
+      expect(@movie.currentFrameIndex).toEqual(n)
+
+    describe "callback", ->
+      beforeEach ->
+        @indexSpy = jasmine.createSpy("indexSpy")
+        @app.bindEvent("movie:paused", (data) => @indexSpy(data.detail.index))
+        @app.triggerEvent("movie:loaded")
+        @app.triggerEvent("movie:screen:appeared")
+
+      it "passes Event object to callback", ->
+        @app.triggerEvent("movie:play")
+        jasmine.clock().tick(1001) # 1 sec. +
+        @app.triggerEvent("movie:pause")
+        expect(@indexSpy).toHaveBeenCalledWith(30) # 1 sec. @30fps

@@ -180,9 +180,9 @@
           >
           <div class="movie_strips">
             <div
-              data-url="http://localhost:8000/assets/paper.png"
+              data-url="http://localhost:8000/assets/time_code.png"
               class="strip hide"
-              data-frames-count=121
+              data-frames-count=303
             >
               <img>
             </div>
@@ -194,9 +194,9 @@
               <img>
             </div>
             <div
-              data-url="http://localhost:8000/assets/time_code.png"
+              data-url="http://localhost:8000/assets/paper.png"
               class="strip hide"
-              data-frames-count=303
+              data-frames-count=121
             >
               <img>
             </div>
@@ -224,10 +224,14 @@
     window.app = new MultiSceneMovie("stages_container");
     app.startScenes();
 
-    anotherApp = new MultiSceneMovie("another_stages_container");
+    window.anotherApp = new MultiSceneMovie("another_stages_container");
 
     app.bindEvent("movie:loaded", function(){
       anotherApp.startScenes();
+    });
+
+    app.bindEvent("movie:paused", function(callbackData) {
+      anotherApp.movie.moveToFrameIndex(callbackData.detail.index)
     });
   </script>
   <!-- @endif -->

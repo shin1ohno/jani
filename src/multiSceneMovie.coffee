@@ -18,6 +18,11 @@ class MultiSceneMovie
 
   getEventEmitter: -> new EventEmitter(document.getElementById(@rootElementId)) #get singleton instance
 
+  playMovieAtIndex: (index) ->
+    return unless @movie
+    @movie.moveToFrameIndex(index)
+    @triggerEvent("movie:play")
+
   composeScenes = (rootElement, movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
     ee = new EventEmitter(rootElement)
 
@@ -26,7 +31,7 @@ class MultiSceneMovie
 
     movie.movieDidLoad = -> ee.emit("movie:loaded")
     movie.movieDidStart = -> ee.emit("movie:started")
-    movie.movieDidPause = -> ee.emit("movie:paused")
+    movie.movieDidPause = -> ee.emit("movie:paused", { "index": movie.currentFrameIndex })
     movie.movieDidResume = -> ee.emit("movie:resumed")
     movie.movieDidFinish = -> ee.emit("movie:finished")
     movie.movieDidPlayedTo = (seconds) -> ee.emit("movie:played:#{seconds}")
@@ -85,6 +90,7 @@ class MultiSceneMovie
     return unless screenElement
 
     movie = Movie.createFromHTMLElement(screenElement, stripElements)
+    @movie = movie
 
     createScene = (sceneElement) -> new Scene(new Stage(sceneElement))
     movieScene = createScene(screenElement)
