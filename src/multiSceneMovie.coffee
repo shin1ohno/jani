@@ -6,7 +6,7 @@
 `import EventEmitter from "multiSceneMovie/eventEmitter"`
 
 class MultiSceneMovie
-  constructor: (@rootElementId) ->
+  constructor: (@rootElement) ->
     @createAndComposeScenes()
 
   startScenes: ->
@@ -16,7 +16,7 @@ class MultiSceneMovie
 
   triggerEvent: (eventName) -> @getEventEmitter().emit(eventName)
 
-  getEventEmitter: -> new EventEmitter(document.getElementById(@rootElementId)) #get singleton instance
+  getEventEmitter: -> new EventEmitter(@rootElement) #get singleton instance
 
   playMovieAtIndex: (index) ->
     return unless @movie
@@ -71,21 +71,21 @@ class MultiSceneMovie
     )
 
   createAndComposeScenes: ->
-    rootElement = document.getElementById(@rootElementId)
-    return unless rootElement
+    @rootElement = convertToPureHTMLDOMElement(@rootElement)
+    return unless @rootElement
 
-    new EventEmitter(rootElement) # Create singleton instance
+    new EventEmitter(@rootElement) # Create singleton instance
 
-    stagesDataset = rootElement.dataset
+    stagesDataset = @rootElement.dataset
     return unless stagesDataset
 
-    movieLoadElement = rootElement.getElementsByClassName(stagesDataset["loadingStage"])[0]
-    movieFinishElement = rootElement.getElementsByClassName(stagesDataset["finishedStage"])[0]
-    contentElement = rootElement.getElementsByClassName(stagesDataset["contentStage"])[0]
+    movieLoadElement = @rootElement.getElementsByClassName(stagesDataset["loadingStage"])[0]
+    movieFinishElement = @rootElement.getElementsByClassName(stagesDataset["finishedStage"])[0]
+    contentElement = @rootElement.getElementsByClassName(stagesDataset["contentStage"])[0]
 
-    movieDataset = rootElement.getElementsByClassName(stagesDataset["movieStage"])[0].dataset
-    screenElement = rootElement.getElementsByClassName(movieDataset["screen"])[0]
-    stripElements = rootElement.getElementsByClassName(movieDataset["stripsContainer"])[0].getElementsByClassName(movieDataset["strips"])
+    movieDataset = @rootElement.getElementsByClassName(stagesDataset["movieStage"])[0].dataset
+    screenElement = @rootElement.getElementsByClassName(movieDataset["screen"])[0]
+    stripElements = @rootElement.getElementsByClassName(movieDataset["stripsContainer"])[0].getElementsByClassName(movieDataset["strips"])
 
     return unless screenElement
 
@@ -98,7 +98,19 @@ class MultiSceneMovie
     movieFinishScene = createScene(movieFinishElement)
     contentScene = createScene(contentElement)
 
-    composeScenes(rootElement, movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
+    composeScenes(@rootElement, movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
     @scenes = [movieLoadScene, movieScene, movieFinishScene, contentScene]
+
+  convertToPureHTMLDOMElement = (element) ->
+    return undefined unless element
+    result = undefined
+    if typeof(element) == "string" # old api
+      result = document.getElementById(element)
+    else
+      if element.selector # jquery or zepto object
+        result = element[0]
+      else # pure HTML DOM element
+        result = element
+    return result
 
 `export default MultiSceneMovie`

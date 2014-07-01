@@ -5,7 +5,7 @@ describe "end to end: multi scene composition", ->
     jasmine.getFixtures().fixturesPath = "fixtures"
     loadFixtures("movie.html")
     #10 seconds movie @30fps loaded
-    @app = new MultiSceneMovie("stages_container")
+    @app = new MultiSceneMovie(document.getElementById("stages_container"))
     @scenes = @app.scenes
     @loading = @scenes[0]
     @playing = @scenes[1]
