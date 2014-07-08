@@ -231,7 +231,8 @@
     });
 
     app.bindEvent("movie:paused", function(callbackData) {
-      anotherApp.movie.moveToFrameIndex(callbackData.detail.index)
+      anotherApp.movie.moveToFrameIndex(callbackData.detail.index);
+      anotherApp.triggerEvent("movie:play")
     });
   </script>
   <!-- @endif -->

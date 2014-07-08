@@ -15,7 +15,7 @@
 
   <script src="/assets/5ee5a729.vendor.min.js"></script>
 
-  <script src="/assets/9fe91d42.app.min.js"></script>
+  <script src="/assets/ad56f8d5.app.min.js"></script>
 
 </head>
 <body>
@@ -158,7 +158,8 @@
     });
 
     app.bindEvent("movie:paused", function(callbackData) {
-      anotherApp.movie.moveToFrameIndex(callbackData.detail.index)
+      anotherApp.movie.moveToFrameIndex(callbackData.detail.index);
+      anotherApp.triggerEvent("movie:play")
     });
   </script>
 </body>
