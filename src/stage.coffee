@@ -1,8 +1,8 @@
 `import AppearanceDetector from "multiSceneMovie/appearanceDetector"`
 
 class Stage
-  constructor: (@element) ->
-    @appearanceDetector = new AppearanceDetector(@element)
+  constructor: (@element, @appearanceDetectorMarginTop, @appearanceDetectorMarginBottom) ->
+    @appearanceDetector = new AppearanceDetector(@element, @appearanceDetectorMarginTop, @appearanceDetectorMarginBottom)
 
   stageDidAppear: ->
 
