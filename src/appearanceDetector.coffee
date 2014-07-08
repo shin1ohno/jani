@@ -5,9 +5,9 @@ class AppearanceDetector
 
   viewportHeight: -> window.innerHeight
   viewportTop: -> window.scrollY
-  viewportBottom: -> @viewportTop() + @viewportHeight()
+  viewportBottom: -> @viewportHeight()
   elementTop: -> @element.getBoundingClientRect().top
-  elementBottom: -> @elementTop() + @element.getBoundingClientRect().height
+  elementBottom: -> @element.getBoundingClientRect().bottom
 
   topVisible: ->
     @elementTop() + @topMargin > 0 && @elementTop() + @topMargin < @viewportBottom()
