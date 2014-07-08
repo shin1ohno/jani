@@ -6,7 +6,7 @@
 `import EventEmitter from "multiSceneMovie/eventEmitter"`
 
 class MultiSceneMovie
-  constructor: (@rootElement) ->
+  constructor: (@rootElement, @appearanceDetectorMarginTop=0, @appearanceDetectorMarginBottom=0) ->
     @createAndComposeScenes()
 
   startScenes: ->
@@ -93,7 +93,7 @@ class MultiSceneMovie
     movie = Movie.createFromHTMLElement(screenElement, stripElements)
     @movie = movie
 
-    createScene = (sceneElement) -> new Scene(new Stage(sceneElement))
+    createScene = (sceneElement) => new Scene(new Stage(sceneElement, @appearanceDetectorMarginTop, @appearanceDetectorMarginBottom))
     movieScene = createScene(screenElement)
     movieLoadScene = createScene(movieLoadElement)
     movieFinishScene = createScene(movieFinishElement)

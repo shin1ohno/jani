@@ -221,10 +221,10 @@
   <!-- @if tests=false -->
   <script>
     var MultiSceneMovie = require("multiSceneMovie/multiSceneMovie")["default"];
-    window.app = new MultiSceneMovie(document.getElementById("stages_container"));
+    window.app = new MultiSceneMovie(document.getElementById("stages_container"), 90, 40);
     app.startScenes();
 
-    window.anotherApp = new MultiSceneMovie(document.getElementById("another_stages_container"));
+    window.anotherApp = new MultiSceneMovie(document.getElementById("another_stages_container"), 90, 90);
 
     app.bindEvent("movie:loaded", function(){
       anotherApp.startScenes();

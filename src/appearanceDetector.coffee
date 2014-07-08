@@ -1,5 +1,5 @@
 class AppearanceDetector
-  constructor: (@element, @topMargin=90, @bottomMargin=90) ->
+  constructor: (@element, @topMargin, @bottomMargin) ->
     @wasVisible = false
     @detect()
 
