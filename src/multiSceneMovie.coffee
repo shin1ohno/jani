@@ -11,6 +11,7 @@ class MultiSceneMovie
 
   startScenes: ->
     @scenes[0].start()
+    @triggerEvent("movie:play")
 
   bindEvent: (eventName, callback) -> @getEventEmitter().listen(eventName, callback)
 
