@@ -36,8 +36,10 @@ class Screen
     @currentStrip().activate()
 
   moveFrameToFirst: ->
+    @currentStrip().deactivate()
     @currentStripIndex = 0
     @currentStrip().frameIndex = 0
+    @currentStrip().activate()
     @currentStrip().moveToCurrentFrame()
 
   isAtFirstFrame: ->
