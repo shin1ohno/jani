@@ -104,22 +104,20 @@ describe "end to end: multi scene composition", ->
         @movie.pause()
         @movie.play()
         jasmine.clock().tick(5001)
-        expect(@appEventSpy).toHaveBeenCalled()
         @movie.rewind()
         @movie.play()
         jasmine.clock().tick(5000)
         expect(@spy.calls.allArgs().map((args) -> args[0])).toEqual(
-            [
-              'movie:started',
-              'movie:played:5',
-              'movie:paused',
-              'movie:resumed',
-              'movie:finished',
-              'movie:played:10',
-              'movie:started',
-              'movie:played:5',
-            ]
-          )
+           [ "movie:started",
+             "movie:played:5",
+             "movie:paused",
+             "movie:resumed",
+             "movie:paused",
+             "movie:finished",
+             "movie:started",
+             "movie:played:5"
+           ]
+        )
 
     describe "event triggering", ->
       beforeEach ->

@@ -40,6 +40,10 @@ class MultiSceneMovie
     movieStage.appearanceDetector.didDisappear = -> ee.emit("movie:screen:disappeared")
 
     ee.listen("movie:loaded", movieLoadScene.finish)
+    ee.listen("movie:finished", ->
+      movie.rewind()
+      movie.pause()
+    )
     ee.listen("movie:finished", movieScene.finish)
     ee.listen("movie:finished", movieFinishScene.start)
     ee.listen("movie:screen:appeared", -> movie.play() if movieStage.isOpen())
@@ -47,6 +51,7 @@ class MultiSceneMovie
     ee.listen("movie:play", -> movie.play() if movieStage.isOpen())
     ee.listen("movie:pause", -> movie.pause())
     ee.listen("movie:resume", -> movie.play() if movieStage.isOpen())
+    ee.listen("movie:rewind", -> movie.rewind() if movieStage.isOpen())
 
     movieLoadScene.sceneDidStart = movie.loadMovie
     movieLoadScene.sceneDidFinish = movieScene.start
