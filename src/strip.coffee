@@ -36,6 +36,7 @@ class Strip
   deactivate: -> @element.classList.add('hide')
 
   moveToCurrentFrame: ->
+    @initializeFrames() unless @currentFrame()
     @element.style.top = "#{@currentFrame().topPosition * -1}px"
     @element.style.left = "#{@currentFrame().leftPosition * -1}px"
 
