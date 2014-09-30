@@ -220,20 +220,9 @@
 
   <!-- @if tests=false -->
   <script>
-    var MultiSceneMovie = require("multiSceneMovie/multiSceneMovie")["default"];
-    window.app = new MultiSceneMovie(document.getElementById("stages_container"), 90, 40);
-    app.startScenes();
-
-    window.anotherApp = new MultiSceneMovie(document.getElementById("another_stages_container"), 90, 90);
-
-    app.bindEvent("movie:loaded", function(){
-      anotherApp.startScenes();
-    });
-
-    app.bindEvent("movie:paused", function(callbackData) {
-      anotherApp.movie.moveToFrameIndex(callbackData.detail.index);
-      anotherApp.triggerEvent("movie:play")
-    });
+    var MasterCompanionMovie = require("multiSceneMovie/masterCompanionMovie")["default"];
+    app = new MasterCompanionMovie(document.getElementById("stages_container"), document.getElementById("another_stages_container"), 90, 40);
+    app.start();
   </script>
   <!-- @endif -->
 </body>
