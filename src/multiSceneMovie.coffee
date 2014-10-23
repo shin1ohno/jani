@@ -4,6 +4,7 @@
 `import Stage from "multiSceneMovie/stage"`
 `import Scene from "multiSceneMovie/scene"`
 `import EventEmitter from "multiSceneMovie/eventEmitter"`
+`import Beacon from "multiSceneMovie/beacon"`
 
 class MultiSceneMovie
   constructor: (@rootElement, @appearanceDetectorMarginTop=0, @appearanceDetectorMarginBottom=0) ->
@@ -27,6 +28,24 @@ class MultiSceneMovie
   composeScenes = (rootElement, movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
     ee = new EventEmitter(rootElement)
 
+    bindTrackingEvent = (event, url, type)->
+      switch event
+        when "creative_view"
+          ee.listen("movie:screen:appeared", -> new Beacon(url, type))
+        when "start"
+          ee.listen("movie:started", -> new Beacon(url, type))
+        when "first_quartile"
+          ee.listen("movie:played:firstQuartile", -> new Beacon(url, type))
+        when "mid_point"
+          ee.listen("movie:played:half", -> new Beacon(url, type))
+        when "third_quartile"
+          ee.listen("movie:played:thirdQuartile", -> new Beacon(url, type))
+        when "complete"
+          ee.listen("movie:finished", -> new Beacon(url, type))
+
+    for tracking in rootElement.getElementsByClassName("tracking")
+      bindTrackingEvent(tracking.dataset.event, tracking.dataset.url, tracking.dataset.type)
+
     movieStage = movieScene.stage
     movieStage.movie = movie # just for spec
 
@@ -36,6 +55,9 @@ class MultiSceneMovie
     movie.movieDidResume = -> ee.emit("movie:resumed")
     movie.movieDidFinish = -> ee.emit("movie:finished")
     movie.movieDidPlayedTo = (seconds) -> ee.emit("movie:played:#{seconds}")
+    movie.firstQuartile = -> ee.emit("movie:played:firstQuartile")
+    movie.half = -> ee.emit("movie:played:half")
+    movie.thirdQuartile = -> ee.emit("movie:played:thirdQuartile")
     movieStage.appearanceDetector.didAppear = -> ee.emit("movie:screen:appeared")
     movieStage.appearanceDetector.didDisappear = -> ee.emit("movie:screen:disappeared")
 
