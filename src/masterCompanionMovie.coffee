@@ -10,7 +10,14 @@ class MasterCompanionMovie
 
     @masterMovie.bindEvent("movie:started", => @triggerEvent("movie:started"))
     @masterMovie.bindEvent("movie:finished", => @triggerEvent("movie:finished"))
+    @masterMovie.bindEvent("movie:played:firstQuartile", => @triggerEvent("movie:played:firstQuartile"))
+    @masterMovie.bindEvent("movie:played:half", => @triggerEvent("movie:played:half"))
+    @masterMovie.bindEvent("movie:played:thirdQuartile", => @triggerEvent("movie:played:thirdQuartile"))
+
     @companionMovie.bindEvent("movie:finished", => @triggerEvent("movie:finished"))
+    @companionMovie.bindEvent("movie:played:firstQuartile", => @triggerEvent("movie:played:firstQuartile"))
+    @companionMovie.bindEvent("movie:played:half", => @triggerEvent("movie:played:half"))
+    @companionMovie.bindEvent("movie:played:thirdQuartile", => @triggerEvent("movie:played:thirdQuartile"))
 
   bindEvent: (eventName, callback) -> getEventEmitter().listen(eventName, callback)
 

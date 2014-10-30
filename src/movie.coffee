@@ -8,6 +8,11 @@ class Movie
     @currentFrameIndex = 0
     @currentTimeCodeInSeconds = 0
     @currentTimeCodeInSecondsWas = 0
+    @framesCount = @strips.reduce(
+      (result, strip) ->
+        result + strip.framesCount
+      , 0
+    )
     @strips.forEach (strip) =>
       strip.stripImageDidLoad = =>
         @_loaded += 1
@@ -21,6 +26,13 @@ class Movie
     @currentFrameIndex++
     @currentTimeCodeInSecondsWas = @currentTimeCodeInSeconds
     @currentTimeCodeInSeconds = Math.floor(@currentFrameIndex / @fps)
+    if @currentFrameIndex == Math.floor(@framesCount / 4)
+      @firstQuartile()
+    if @currentFrameIndex == Math.floor(@framesCount / 2)
+      @half()
+    if @currentFrameIndex == Math.floor(@framesCount / 4 * 3)
+      @thirdQuartile()
+
     if @currentTimeCodeInSecondsWas != @currentTimeCodeInSeconds
       @movieDidPlayedTo(@currentTimeCodeInSeconds)
 
@@ -80,6 +92,9 @@ class Movie
   movieDidPause: ->
   movieDidFinish: ->
   movieDidPlayedTo: (seconds) ->
+  firstQuartile: ->
+  half: ->
+  thirdQuartile: ->
 
   @createFromHTMLElement: (screenElement, stripElements) ->
     movieData = screenElement.dataset

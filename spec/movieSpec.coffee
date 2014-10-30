@@ -45,3 +45,6 @@ describe "single strip movie", ->
       @movie.play()
       jasmine.clock().tick(14001)
       expect(@movie.movieDidPlayedTo.calls.count()).toEqual(15)
+
+    it "set frames count to movie", ->
+      expect(@movie.framesCount).toEqual(300)
