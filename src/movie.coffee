@@ -103,12 +103,15 @@ class Movie
     height = parseInt(movieData.frameHeight, 10)
 
     screen = new Screen(screenElement)
-    screen.element.style.width = width
-    screen.element.style.height = height
+    screenElement.style.width = "#{width}px"
+    screenElement.style.height = "#{height}px"
 
     strips = []
     strips.push(new Strip(strip.dataset.url, width, height, parseInt(strip.dataset.framesCount, 10), strip)) for strip in stripElements
 
-    new Movie(screen, strips, parseInt(movieData.fps, 10))
+    movie = new Movie(screen, strips, parseInt(movieData.fps, 10))
+    movie.frameWidth = width
+    movie.frameHeight = height
+    return movie
 
 `export default Movie`
