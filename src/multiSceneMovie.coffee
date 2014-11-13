@@ -126,6 +126,9 @@ class MultiSceneMovie
     movieFinishScene = createScene(movieFinishElement)
     contentScene = createScene(contentElement)
 
+    contentElement.getElementsByTagName("img")[0].style.height = "#{movie.frameHeight}px"
+    contentElement.getElementsByTagName("img")[0].style.width = "#{movie.frameWidth}px"
+
     composeScenes(@rootElement, movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
     @scenes = [movieLoadScene, movieScene, movieFinishScene, contentScene]
 
