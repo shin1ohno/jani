@@ -113,21 +113,28 @@ class MultiSceneMovie
 
     movieDataset = @rootElement.getElementsByClassName(stagesDataset["movieStage"])[0].dataset
     screenElement = @rootElement.getElementsByClassName(movieDataset["screen"])[0]
-    stripElements = @rootElement.getElementsByClassName(movieDataset["stripsContainer"])[0].getElementsByClassName(movieDataset["strips"])
+    stripContainerElement = @rootElement.getElementsByClassName(movieDataset["stripsContainer"])[0]
+    stripElements = stripContainerElement.getElementsByClassName(movieDataset["strips"])
 
     return unless screenElement
 
     movie = Movie.createFromHTMLElement(screenElement, stripElements)
     @movie = movie
 
+    heightString = "#{movie.frameHeight}px"
+    widthString = "#{movie.frameWidth}px"
+
+    stripContainerElement.style.height = heightString
+    stripContainerElement.style.width = widthString
+    contentImageElement = contentElement.getElementsByTagName("img")[0]
+    contentImageElement.style.height = heightString
+    contentImageElement.style.width = widthString
+
     createScene = (sceneElement) => new Scene(new Stage(sceneElement, @appearanceDetectorMarginTop, @appearanceDetectorMarginBottom))
     movieScene = createScene(screenElement)
     movieLoadScene = createScene(movieLoadElement)
     movieFinishScene = createScene(movieFinishElement)
     contentScene = createScene(contentElement)
-
-    contentElement.getElementsByTagName("img")[0].style.height = "#{movie.frameHeight}px"
-    contentElement.getElementsByTagName("img")[0].style.width = "#{movie.frameWidth}px"
 
     composeScenes(@rootElement, movie, movieScene, movieLoadScene, movieFinishScene, contentScene)
     @scenes = [movieLoadScene, movieScene, movieFinishScene, contentScene]
