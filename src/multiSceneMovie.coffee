@@ -5,6 +5,7 @@
 `import Scene from "multiSceneMovie/scene"`
 `import EventEmitter from "multiSceneMovie/eventEmitter"`
 `import Beacon from "multiSceneMovie/beacon"`
+`import VastRequest from "multiSceneMovie/vastRequest"`
 
 class MultiSceneMovie
   constructor: (@rootElement, @appearanceDetectorMarginTop=0, @appearanceDetectorMarginBottom=0) ->
@@ -28,23 +29,47 @@ class MultiSceneMovie
   composeScenes = (rootElement, movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
     ee = new EventEmitter(rootElement)
 
-    bindTrackingEvent = (event, url, type)->
-      switch event
-        when "creative_view"
-          ee.listen("movie:screen:appeared", -> new Beacon(url, type))
-        when "start"
-          ee.listen("movie:started", -> new Beacon(url, type))
-        when "first_quartile"
-          ee.listen("movie:played:firstQuartile", -> new Beacon(url, type))
-        when "mid_point"
-          ee.listen("movie:played:half", -> new Beacon(url, type))
-        when "third_quartile"
-          ee.listen("movie:played:thirdQuartile", -> new Beacon(url, type))
-        when "complete"
-          ee.listen("movie:finished", -> new Beacon(url, type))
+    composeVastTrackingEvents = (eventEmitter) ->
+      bindTrackingEvent = (eventEmitter, tracking) ->
+        return unless eventEmitter
+        eventName = undefined
 
-    for tracking in rootElement.getElementsByClassName("tracking")
-      bindTrackingEvent(tracking.dataset.event, tracking.dataset.url, tracking.dataset.type)
+        switch tracking.event
+          when "creative_view"
+            eventName = "movie:screen:appeared"
+          when "creativeView"
+            eventName = "movie:screen:appeared"
+          when "start"
+            eventName = "movie:started"
+          when "first_quartile"
+            eventName = "movie:played:firstQuartile"
+          when "firstQuartile"
+            eventName = "movie:played:firstQuartile"
+          when "mid_point"
+            eventName = "movie:played:half"
+          when "midPoint"
+            eventName = "movie:played:half"
+          when "midpoint"
+            eventName = "movie:played:half"
+          when "third_quartile"
+            eventName = "movie:played:thirdQuartile"
+          when "thirdQuartile"
+            eventName = "movie:played:thirdQuartile"
+          when "complete"
+            eventName = "movie:finished"
+          when "clickThrough"
+            eventName = "movie:clickThrough"
+
+        eventEmitter.listen(eventName, -> new Beacon(tracking.url, tracking.type)) if eventName
+
+      vastUrl = rootElement.getElementsByClassName("tracking_events")[0]?.dataset?.vastUrl
+      new VastRequest(vastUrl, eventEmitter, bindTrackingEvent)
+
+      unless vastUrl
+        for tracking in rootElement.getElementsByClassName("tracking")
+          bindTrackingEvent(tracking.dataset.event, tracking.dataset.url, tracking.dataset.type)
+
+    composeVastTrackingEvents(ee)
 
     movieStage = movieScene.stage
     movieStage.movie = movie # just for spec
@@ -97,6 +122,11 @@ class MultiSceneMovie
       movieScene.start()
       ee.emit("movie:replayed")
     )
+
+    # For VAST click through events
+    contentScene.stage.element.querySelector("a")?.addEventListener("click", ->
+      ee.emit("movie:clickThrough")
+    ,false)
 
   createAndComposeScenes: ->
     @rootElement = convertToPureHTMLDOMElement(@rootElement)
