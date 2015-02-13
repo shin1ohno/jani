@@ -93,12 +93,12 @@ class MultiSceneMovie
     )
     ee.listen("movie:finished", movieScene.finish)
     ee.listen("movie:finished", movieFinishScene.start)
-    ee.listen("movie:screen:appeared", -> movie.play() if movieStage.isOpen())
+    ee.listen("movie:screen:appeared", -> movie.play() if movieStage.isVisible())
     ee.listen("movie:screen:disappeared", -> movie.pause())
-    ee.listen("movie:play", -> movie.play() if movieStage.isOpen())
+    ee.listen("movie:play", -> movie.play() if movieStage.isVisible())
     ee.listen("movie:pause", -> movie.pause())
-    ee.listen("movie:resume", -> movie.play() if movieStage.isOpen())
-    ee.listen("movie:rewind", -> movie.rewind() if movieStage.isOpen())
+    ee.listen("movie:resume", -> movie.play() if movieStage.isVisible())
+    ee.listen("movie:rewind", -> movie.rewind() if movieStage.isVisible())
 
     movieLoadScene.sceneDidStart = movie.loadMovie
     movieLoadScene.sceneDidFinish = movieScene.start
