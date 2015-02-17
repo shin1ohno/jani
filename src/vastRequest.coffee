@@ -1,6 +1,9 @@
+`import Beacon from "multiSceneMovie/beacon"`
+
 class VastRequest
   constructor: (@url, @eventEmitter, @callback) ->
     @clickThrough = undefined
+    @ready = undefined
     @run() if @url
 
   valid: ->
@@ -34,12 +37,27 @@ class VastRequest
       xmlDomTree.querySelectorAll("Impression"),
       (node) ->
         trackings.push({
-          event: "start",
+          event: "impression",
           url: node.textContent,
           type: "img"
         })
     )
-    @callback(@eventEmitter, tracking) for tracking in trackings
+    bindTrackingEvent(@eventEmitter, tracking) for tracking in trackings
+    @callback() if @callback
+
+  bindTrackingEvent = (eventEmitter, tracking) ->
+    return unless eventEmitter
+    fromVastEventToJaniEvent = {
+      "creativeView": "movie:screen:appeared",
+      "impression": "movie:started",
+      "firstQuartile": "movie:played:firstQuartile",
+      "midpoint": "movie:played:half",
+      "thirdQuartile": "movie:played:thirdQuartile",
+      "complete": "movie:finished",
+      "clickThrough": "movie:clickThrough"
+    }
+    eventName = fromVastEventToJaniEvent[tracking.event]
+    eventEmitter.listen(eventName, -> new Beacon(tracking.url, tracking.type)) if eventName
 
   requestHandler: (callback) ->
     @xhr = new XMLHttpRequest() unless @xhr
@@ -48,6 +66,7 @@ class VastRequest
       ((event) =>
         callback(@xhr.responseXML)
         @xhr.removeEventListener("load", arguments, false)
+        @ready = true
       ),
       false
     )
