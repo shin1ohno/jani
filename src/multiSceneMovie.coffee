@@ -28,23 +28,24 @@ class MultiSceneMovie
   composeScenes = (rootElement, movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
     ee = new EventEmitter(rootElement)
 
-    bindTrackingEvent = (event, url, type)->
-      switch event
-        when "creative_view"
-          ee.listen("movie:screen:appeared", -> new Beacon(url, type))
-        when "start"
-          ee.listen("movie:started", -> new Beacon(url, type))
-        when "first_quartile"
-          ee.listen("movie:played:firstQuartile", -> new Beacon(url, type))
-        when "mid_point"
-          ee.listen("movie:played:half", -> new Beacon(url, type))
-        when "third_quartile"
-          ee.listen("movie:played:thirdQuartile", -> new Beacon(url, type))
-        when "complete"
-          ee.listen("movie:finished", -> new Beacon(url, type))
+    composeTrackingEvents = (eventEmitter) ->
+      bindTrackingEvent = (eventEmitter, trackingElement) ->
+        return unless eventEmitter
+        eventPatterns = {
+          "creative_view": "movie:screen:appeared",
+          "start": "movie:started",
+          "first_quartile": "movie:played:firstQuartile",
+          "mid_point": "movie:played:half",
+          "third_quartile": "movie:played:thirdQuartile",
+          "complete": "movie:finished"
+        }
+        eventName = eventPatterns[trackingElement.dataset.event]
+        eventEmitter.listen(eventName, -> new Beacon(trackingElement.dataset.url, trackingElement.dataset.type)) if eventName
 
-    for tracking in rootElement.getElementsByClassName("tracking")
-      bindTrackingEvent(tracking.dataset.event, tracking.dataset.url, tracking.dataset.type)
+      for trackingElement in rootElement.getElementsByClassName("tracking")
+        bindTrackingEvent(eventEmitter, trackingElement)
+
+    composeTrackingEvents(ee)
 
     movieStage = movieScene.stage
     movieStage.movie = movie # just for spec
@@ -68,12 +69,12 @@ class MultiSceneMovie
     )
     ee.listen("movie:finished", movieScene.finish)
     ee.listen("movie:finished", movieFinishScene.start)
-    ee.listen("movie:screen:appeared", -> movie.play() if movieStage.isOpen())
+    ee.listen("movie:screen:appeared", -> movie.play() if movieStage.isVisible())
     ee.listen("movie:screen:disappeared", -> movie.pause())
-    ee.listen("movie:play", -> movie.play() if movieStage.isOpen())
+    ee.listen("movie:play", -> movie.play() if movieStage.isVisible())
     ee.listen("movie:pause", -> movie.pause())
-    ee.listen("movie:resume", -> movie.play() if movieStage.isOpen())
-    ee.listen("movie:rewind", -> movie.rewind() if movieStage.isOpen())
+    ee.listen("movie:resume", -> movie.play() if movieStage.isVisible())
+    ee.listen("movie:rewind", -> movie.rewind() if movieStage.isVisible())
 
     movieLoadScene.sceneDidStart = movie.loadMovie
     movieLoadScene.sceneDidFinish = movieScene.start
@@ -97,6 +98,11 @@ class MultiSceneMovie
       movieScene.start()
       ee.emit("movie:replayed")
     )
+
+    # For VAST click through events
+    contentScene.stage.element.querySelector("a")?.addEventListener("click", ->
+      ee.emit("movie:clickThrough")
+    ,false)
 
   createAndComposeScenes: ->
     @rootElement = convertToPureHTMLDOMElement(@rootElement)

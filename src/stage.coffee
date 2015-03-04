@@ -19,4 +19,6 @@ class Stage
   isOpen: -> !@isClose()
   isClose: -> @element.classList.contains('hide')
 
+  isVisible: -> @isOpen() && @appearanceDetector.visible()
+
 `export default Stage`
