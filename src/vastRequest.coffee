@@ -10,7 +10,29 @@ class VastRequest
     return false unless @url
     return true
 
-  run: -> @requestHandler(@setTrackers)
+  run: -> @requestHandler(@loadWrapperAdIfNeeded)
+
+  loadWrapperAdIfNeeded: (xmlDomTree, callback) =>
+    wrappedVASTAd = xmlDomTree.querySelector("Wrapper VASTAdTagURI")
+    if wrappedVASTAd
+      wrappedVASTAdURI = wrappedVASTAd.textContent
+      @xhr = new XMLHttpRequest() unless @xhr
+      @xhr.addEventListener("load",
+        ((event) =>
+          callback(@xhr.responseXML)
+          @xhr.removeEventListener("load", arguments, false)
+          wrapperVASTImpressionTrackings = xmlDomTree.querySelectorAll("Impression")
+          new Beacon(tracking.textContent) for tracking in wrapperVASTImpressionTrackings
+        ),
+        false
+      )
+      try
+        @xhr.open("GET", wrappedVASTAdURI)
+        @xhr.send(null)
+      catch e
+        # do nothing and ignore errors
+    else
+      callback(xmlDomTree)
 
   setTrackers: (xmlDomTree) =>
     return unless xmlDomTree
@@ -64,7 +86,7 @@ class VastRequest
 
     @xhr.addEventListener("load",
       ((event) =>
-        callback(@xhr.responseXML)
+        callback(@xhr.responseXML, @setTrackers)
         @xhr.removeEventListener("load", arguments, false)
         @ready = true
       ),
