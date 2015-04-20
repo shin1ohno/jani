@@ -25,6 +25,8 @@ class MultiSceneMovie
     @movie.moveToFrameIndex(index)
     @triggerEvent("movie:play")
 
+  isPlayingMovie: -> @scenes[1]?.stage?.isOpen()
+
   composeScenes = (rootElement, movie, movieScene, movieLoadScene, movieFinishScene, contentScene) ->
     ee = new EventEmitter(rootElement)
 
@@ -75,6 +77,12 @@ class MultiSceneMovie
     ee.listen("movie:pause", -> movie.pause())
     ee.listen("movie:resume", -> movie.play() if movieStage.isVisible())
     ee.listen("movie:rewind", -> movie.rewind() if movieStage.isVisible())
+    ee.listen("movie:displayContent", ->
+      movie.rewind()
+      movie.pause()
+      movieScene.finish()
+      contentScene.start()
+    )
 
     movieLoadScene.sceneDidStart = movie.loadMovie
     movieLoadScene.sceneDidFinish = movieScene.start
