@@ -4,13 +4,15 @@ class FullscreenVideo
   constructor: (sourceUrl, wrapperElement) ->
     @videoElement = document.createElement("video")
     @videoElement.src = sourceUrl
+    @videoElement.controls = true
     @eventEmitter = new EventEmitter(wrapperElement)
-    wrapperElement.appendChild(setStyles(@videoElement))
+    videoWrapperElement = document.createElement("div")
+    wrapperElement.appendChild(setStyles(@videoElement, videoWrapperElement))
     setEvents(@videoElement, this)
 
   play: ->
-    enterFullScreen(@videoElement)
     @videoElement.play()
+    enterFullScreen(@videoElement)
     return this
 
   pause: -> @videoElement.pause()
@@ -19,14 +21,22 @@ class FullscreenVideo
 
   triggerEvent: (eventName) -> @eventEmitter.emit(eventName)
 
-  setStyles = (videoElement) ->
+  setStyles = (videoElement, videoWrapperElement) ->
     videoElement.preload = "metadata"
     videoElement.style.width = "1px"
     videoElement.style.height = "1px"
     videoElement.style.position = "absolute"
     videoElement.style.top = "0px"
     videoElement.style.left = "0px"
-    return videoElement
+    videoWrapperElement.style.width = "1px"
+    videoWrapperElement.style.height = "1px"
+    videoWrapperElement.style.position = "absolute"
+    videoWrapperElement.style.top = "-9999px"
+    videoWrapperElement.style.left = "-9999px"
+    videoWrapperElement.style.overflow = "hidden"
+    videoWrapperElement.zIndex = 0
+    videoWrapperElement.appendChild(videoElement)
+    return videoWrapperElement
 
   setEvents = (videoElement, fullscreenVideo) ->
     changeHandler = ->
@@ -61,6 +71,7 @@ class FullscreenVideo
     return videoElement.msRequestFullscreen() if videoElement.msRequestFullscreen
     return videoElement.mozRequestFullScreen() if videoElement.mozRequestFullScreen
     return videoElement.webkitRequestFullscreen() if videoElement.webkitRequestFullscreen
+    return videoElement.webkitEnterFullScreen() if videoElement.webkitEnterFullScreen
     return videoElement.webkitEnterFullscreen() if videoElement.webkitEnterFullscreen
 
 `export default FullscreenVideo`
