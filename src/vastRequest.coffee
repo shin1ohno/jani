@@ -65,6 +65,7 @@ class VastRequest
         })
     )
     bindTrackingEvent(@eventEmitter, tracking) for tracking in trackings
+    @mediaUrl = xmlDomTree.querySelector("Linear MediaFile").textContent
     @callback() if @callback
 
   bindTrackingEvent = (eventEmitter, tracking) ->
